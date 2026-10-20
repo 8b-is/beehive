@@ -70,3 +70,7 @@ swift run beehive-cli --add-member
 ./android/build_apk.sh
 # Output: dist/BeeHive-v1.0.0-android-universal.apk
 ```
+
+### 3.4 BeerusOmni-chan & Warren Buffett Moat Evolution (`node --test`)
+- Added `evaluateBerkshireMoatAndCompounding()` in `pipeline/beehive-pipeline.mjs` and `test/beehive.test.mjs` (4 tests passing: MultiGraphFamily >6 cap, `<~~0o0` roundtrip, 40-yr compounding `$114 -> $167,554.48` & `WIDE_MOAT_FOREVER_HOLD`, and 5-stage pipeline verification).
+

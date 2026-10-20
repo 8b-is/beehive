@@ -111,6 +111,41 @@ export function decodeKompressSuperUltra(frame) {
 }
 
 // ---------------------------------------------------------------------------
+// 1b. Warren Buffett Capital Allocation & Moat Evaluator (Berkshire Float Engine)
+// ---------------------------------------------------------------------------
+
+export function evaluateBerkshireMoatAndCompounding({
+  initialCapitalUsd = 114,
+  annualReturnRate = 0.20,
+  years = 40,
+  switchingCostNodes = 10,
+  appleCapLimit = 6,
+} = {}) {
+  const compoundedValueUsd = Number(
+    (initialCapitalUsd * Math.pow(1 + annualReturnRate, years)).toFixed(2)
+  );
+  const switchingCostMultiplier = Number(
+    (switchingCostNodes / Math.max(1, appleCapLimit)).toFixed(2)
+  );
+  // Moat score (0..100): combines network-effect edge density + switching cost + zero-debt float
+  const moatScore = Math.min(
+    100,
+    Math.round(65 + (switchingCostNodes - appleCapLimit) * 5 + annualReturnRate * 50)
+  );
+  return {
+    initialCapitalUsd,
+    annualReturnRate,
+    years,
+    compoundedValueUsd,
+    switchingCostMultiplier,
+    moatScore,
+    marginOfSafetyVerdict: moatScore >= 80 ? 'WIDE_MOAT_FOREVER_HOLD' : 'FAIR_MOAT',
+    ruleNo1: 'Never lose family continuity (or principal).',
+  };
+}
+
+
+// ---------------------------------------------------------------------------
 // 2. MultiGraphFamily System ({<3,<3,<3}+1 .. +∞)
 //    Breaks Apple Family Sharing's 6-member hard ceiling
 // ---------------------------------------------------------------------------
