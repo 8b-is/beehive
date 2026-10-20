@@ -1,0 +1,15 @@
+{
+  "acquiredAt": "2026-10-20T09:04:43.409Z",
+  "id": "02-radio-mesh-findmy-lora-ble-airplay",
+  "lane": "Radio & Acoustic Mesh (FindMy · LoRa · BLE · AirPlay)",
+  "title": "Quad-Transport Presence & Audio Routing Across Android, iOS, and macOS",
+  "sourceRepo": "8b-is/wigle-triad + 8b-is/beehive",
+  "url": "https://esp32.vaked.dev/",
+  "summary": "Unifies Apple/OpenHaystack FindMy geofence rings, 920 MHz LoRa off-grid <~~0o0 packets via ESP32-S3 MEDUSA (ADA *, VAK /\\, OMN oo), Bluetooth LE 5.3 RSSI trilateration + A2DP stereo (soundcore Select 4 Go), and AirPlay 2 multi-room group sync.",
+  "metrics": {
+    "loraPayloadBytes": 38,
+    "loraAirtimeMs": 44,
+    "bleScanHz": 10,
+    "airplayRooms": 4
+  }
+}

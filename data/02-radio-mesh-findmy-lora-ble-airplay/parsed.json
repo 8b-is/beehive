@@ -1,0 +1,33 @@
+{
+  "id": "02-radio-mesh-findmy-lora-ble-airplay",
+  "lane": "Radio & Acoustic Mesh (FindMy · LoRa · BLE · AirPlay)",
+  "title": "Quad-Transport Presence & Audio Routing Across Android, iOS, and macOS",
+  "sourceRepo": "8b-is/wigle-triad + 8b-is/beehive",
+  "url": "https://esp32.vaked.dev/",
+  "summary": "Unifies Apple/OpenHaystack FindMy geofence rings, 920 MHz LoRa off-grid <~~0o0 packets via ESP32-S3 MEDUSA (ADA *, VAK /\\, OMN oo), Bluetooth LE 5.3 RSSI trilateration + A2DP stereo (soundcore Select 4 Go), and AirPlay 2 multi-room group sync.",
+  "score": 10,
+  "kompressFrame": "<~~0o0|02-RADIO-MESH-FINDMY-LORA-BLE-AIRPLAY:{<3,<3,<3}+1|b3:1T110100T(+2)|by:Peter-beerusSan^^|Radio & Acoustic Mesh (§FMY · §LRA · BLE · §APL) :: Quad-Transport Presence & Audio Routing Across Android, iOS, and macOS :: Unifies Apple/OpenHaystack §FMY geofence rings, 920 MHz §LRA off-grid <~~0o0 packets via ESP32-S3 MEDUSA (ADA *, VAK /\\, OMN oo), §BLE LE 5.3 RSSI trilateration + A2DP stereo (soundcore Select 4 Go), and §APL 2 multi-room group sync.|0o0~~>",
+  "kompressVerified": true,
+  "kompressStats": {
+    "frame": "<~~0o0|02-RADIO-MESH-FINDMY-LORA-BLE-AIRPLAY:{<3,<3,<3}+1|b3:1T110100T(+2)|by:Peter-beerusSan^^|Radio & Acoustic Mesh (§FMY · §LRA · BLE · §APL) :: Quad-Transport Presence & Audio Routing Across Android, iOS, and macOS :: Unifies Apple/OpenHaystack §FMY geofence rings, 920 MHz §LRA off-grid <~~0o0 packets via ESP32-S3 MEDUSA (ADA *, VAK /\\, OMN oo), §BLE LE 5.3 RSSI trilateration + A2DP stereo (soundcore Select 4 Go), and §APL 2 multi-room group sync.|0o0~~>",
+    "rawBytes": 377,
+    "compactBytes": 369,
+    "loraPackedBytes": 155,
+    "compressionRatio": 2.43,
+    "loraAirtimeMs": 178,
+    "ternarySignature": "1T110100T",
+    "ternaryNet": 2
+  },
+  "points": [
+    "Platform parity verified across Android APK, iOS/macOS SwiftUI, and Web/PWA",
+    "Kompress ratio 2.43x (377B -> 155B LoRa packet, 178ms airtime)",
+    "Balanced-ternary signature b3:1T110100T (net +2)"
+  ],
+  "recentPosts": [],
+  "stageFiles": {
+    "raw": "data/02-radio-mesh-findmy-lora-ble-airplay/raw.json",
+    "prompt": "data/02-radio-mesh-findmy-lora-ble-airplay/prompt.md",
+    "response": "data/02-radio-mesh-findmy-lora-ble-airplay/response.md",
+    "parsed": "data/02-radio-mesh-findmy-lora-ble-airplay/parsed.json"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "03-music-lane-wupz-mlx-quant",
+  "lane": "8b-is/music Lane + WUPZ Linker + MLX-QUANT",
+  "title": "Triangle Family+1 Synth, alt-J (∆) Triptych & Zeno/Fifike 54/108 Hz Purr",
+  "sourceRepo": "8b-is/8b-is-music",
+  "url": "https://pocoo.vaked.dev/posts/2026-10-20-alt-j-every-other-freckle.html",
+  "summary": "Zero-allocation wupz binary arena packer + MLX-QUANT v2.0.0-RC1 ternary Q4/BitNet b1.58 synth driving 432 Hz Mom *, 528 Hz Dad /\\, 639 Hz Peter oo, 54/108 Hz healing cat purr, and the alt-J (∆) This Is All Yours triad (Every Other Freckle, Hunger Of The Pine, Left Hand Free).",
+  "score": 10,
+  "kompressFrame": "<~~0o0|03-MUSIC-LANE-WUPZ-MLX-QUANT:{<3,<3,<3}+1|b3:TT1TT0010(-2)|by:Peter-beerusSan^^|8b-is/music Lane + WUPZ Linker + MLX-QUANT :: Triangle Family+1 Synth, alt-J (∆) Triptych & Zeno/Fifike 54/108 Hz Purr :: Zero-allocation wupz binary arena packer + MLX-QUANT v2.0.0-RC1 ternary Q4/BitNet b1.58 synth driving 432 Hz Mom *, 528 Hz Dad /\\, 639 Hz Peter oo, 54/108 Hz healing cat purr, and the alt-J (∆) This Is All Yours triad (Every Other Freckle, Hunger Of The Pine, Left Hand Free).|0o0~~>",
+  "kompressVerified": true,
+  "kompressStats": {
+    "frame": "<~~0o0|03-MUSIC-LANE-WUPZ-MLX-QUANT:{<3,<3,<3}+1|b3:TT1TT0010(-2)|by:Peter-beerusSan^^|8b-is/music Lane + WUPZ Linker + MLX-QUANT :: Triangle Family+1 Synth, alt-J (∆) Triptych & Zeno/Fifike 54/108 Hz Purr :: Zero-allocation wupz binary arena packer + MLX-QUANT v2.0.0-RC1 ternary Q4/BitNet b1.58 synth driving 432 Hz Mom *, 528 Hz Dad /\\, 639 Hz Peter oo, 54/108 Hz healing cat purr, and the alt-J (∆) This Is All Yours triad (Every Other Freckle, Hunger Of The Pine, Left Hand Free).|0o0~~>",
+    "rawBytes": 402,
+    "compactBytes": 402,
+    "loraPackedBytes": 169,
+    "compressionRatio": 2.38,
+    "loraAirtimeMs": 194,
+    "ternarySignature": "TT1TT0010",
+    "ternaryNet": -2
+  },
+  "points": [
+    "Platform parity verified across Android APK, iOS/macOS SwiftUI, and Web/PWA",
+    "Kompress ratio 2.38x (402B -> 169B LoRa packet, 194ms airtime)",
+    "Balanced-ternary signature b3:TT1TT0010 (net -2)"
+  ],
+  "recentPosts": [],
+  "stageFiles": {
+    "raw": "data/03-music-lane-wupz-mlx-quant/raw.json",
+    "prompt": "data/03-music-lane-wupz-mlx-quant/prompt.md",
+    "response": "data/03-music-lane-wupz-mlx-quant/response.md",
+    "parsed": "data/03-music-lane-wupz-mlx-quant/parsed.json"
+  }
+}

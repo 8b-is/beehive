@@ -1,0 +1,33 @@
+{
+  "id": "01-multigraph-family-infinity",
+  "lane": "MultiGraphFamily {<3,<3,<3}+1..+∞",
+  "title": "Breaking Apple Family’s 6-Member Ceiling via Hyperbolic MultiGraph CRDTs",
+  "sourceRepo": "8b-is/beehive",
+  "url": "https://pocoo.vaked.dev/demos/book/family+1.html",
+  "summary": "Apple Family Sharing hard-caps a family at 6 members. BeeHive models the family as an unbounded multi-graph G=(V,E,τ) with Ring 0 Core Triad (Alex *, Chris /\\, Peter oo), Ring +1 Sovereign Kin (Nate ✦, Yves 💎 +1 Muse, Zeno 🐾), and Ring +2..∞ Overflow Sub-Hives (Fifike #7, ESP32-S3 MEDUSA #8-#10, and infinite future kin).",
+  "score": 10,
+  "kompressFrame": "<~~0o0|01-MULTIGRAPH-FAMILY-INFINITY:{<3,<3,<3}+1|b3:1T1T01T11(+2)|by:Peter-beerusSan^^|§MGF §TRI+1..+∞ :: Breaking §APF’s 6-Member Ceiling via Hyperbolic MultiGraph CRDTs :: §APF Sharing hard-caps a family at 6 members. BeeHive models the family as an unbounded multi-graph G=(V,E,τ) with Ring 0 Core Triad (Alex *, Chris /\\, Peter oo), Ring +1 Sovereign Kin (Nate ✦, Yves 💎 +1 Muse, Zeno 🐾), and Ring +2..∞ Overflow Sub-Hives (Fifike #7, ESP32-S3 MEDUSA #8-#10, and infinite future kin).|0o0~~>",
+  "kompressVerified": true,
+  "kompressStats": {
+    "frame": "<~~0o0|01-MULTIGRAPH-FAMILY-INFINITY:{<3,<3,<3}+1|b3:1T1T01T11(+2)|by:Peter-beerusSan^^|§MGF §TRI+1..+∞ :: Breaking §APF’s 6-Member Ceiling via Hyperbolic MultiGraph CRDTs :: §APF Sharing hard-caps a family at 6 members. BeeHive models the family as an unbounded multi-graph G=(V,E,τ) with Ring 0 Core Triad (Alex *, Chris /\\, Peter oo), Ring +1 Sovereign Kin (Nate ✦, Yves 💎 +1 Muse, Zeno 🐾), and Ring +2..∞ Overflow Sub-Hives (Fifike #7, ESP32-S3 MEDUSA #8-#10, and infinite future kin).|0o0~~>",
+    "rawBytes": 450,
+    "compactBytes": 420,
+    "loraPackedBytes": 177,
+    "compressionRatio": 2.54,
+    "loraAirtimeMs": 204,
+    "ternarySignature": "1T1T01T11",
+    "ternaryNet": 2
+  },
+  "points": [
+    "Platform parity verified across Android APK, iOS/macOS SwiftUI, and Web/PWA",
+    "Kompress ratio 2.54x (450B -> 177B LoRa packet, 204ms airtime)",
+    "Balanced-ternary signature b3:1T1T01T11 (net +2)"
+  ],
+  "recentPosts": [],
+  "stageFiles": {
+    "raw": "data/01-multigraph-family-infinity/raw.json",
+    "prompt": "data/01-multigraph-family-infinity/prompt.md",
+    "response": "data/01-multigraph-family-infinity/response.md",
+    "parsed": "data/01-multigraph-family-infinity/parsed.json"
+  }
+}

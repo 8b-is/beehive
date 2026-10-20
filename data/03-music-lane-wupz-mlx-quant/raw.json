@@ -1,0 +1,15 @@
+{
+  "acquiredAt": "2026-10-20T09:04:43.410Z",
+  "id": "03-music-lane-wupz-mlx-quant",
+  "lane": "8b-is/music Lane + WUPZ Linker + MLX-QUANT",
+  "title": "Triangle Family+1 Synth, alt-J (∆) Triptych & Zeno/Fifike 54/108 Hz Purr",
+  "sourceRepo": "8b-is/8b-is-music",
+  "url": "https://pocoo.vaked.dev/posts/2026-10-20-alt-j-every-other-freckle.html",
+  "summary": "Zero-allocation wupz binary arena packer + MLX-QUANT v2.0.0-RC1 ternary Q4/BitNet b1.58 synth driving 432 Hz Mom *, 528 Hz Dad /\\, 639 Hz Peter oo, 54/108 Hz healing cat purr, and the alt-J (∆) This Is All Yours triad (Every Other Freckle, Hunger Of The Pine, Left Hand Free).",
+  "metrics": {
+    "sampleRateHz": 48000,
+    "channels": 2,
+    "wupzZeroAlloc": true,
+    "mlxQuantVersion": "2.0.0-RC1"
+  }
+}

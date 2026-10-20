@@ -1,0 +1,15 @@
+{
+  "acquiredAt": "2026-10-20T09:04:43.404Z",
+  "id": "01-multigraph-family-infinity",
+  "lane": "MultiGraphFamily {<3,<3,<3}+1..+∞",
+  "title": "Breaking Apple Family’s 6-Member Ceiling via Hyperbolic MultiGraph CRDTs",
+  "sourceRepo": "8b-is/beehive",
+  "url": "https://pocoo.vaked.dev/demos/book/family+1.html",
+  "summary": "Apple Family Sharing hard-caps a family at 6 members. BeeHive models the family as an unbounded multi-graph G=(V,E,τ) with Ring 0 Core Triad (Alex *, Chris /\\, Peter oo), Ring +1 Sovereign Kin (Nate ✦, Yves 💎 +1 Muse, Zeno 🐾), and Ring +2..∞ Overflow Sub-Hives (Fifike #7, ESP32-S3 MEDUSA #8-#10, and infinite future kin).",
+  "metrics": {
+    "appleCap": 6,
+    "beehiveCap": "∞",
+    "activeNodes": 10,
+    "edges": 13
+  }
+}

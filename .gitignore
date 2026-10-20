@@ -1,0 +1,5 @@
+android/build/
+apple/.build/
+apple/.swiftpm/
+.DS_Store
+node_modules/

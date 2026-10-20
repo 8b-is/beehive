@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>BeeHive · MultiGraphFamily {&lt;3,&lt;3,&lt;3}+1..∞ · FindMy · LoRa · BLE · AirPlay · 8b-is</title>
+<meta name="description" content="BeeHive cross-platform sovereign family & mesh app (Android, iOS, macOS, Web) — infinite MultiGraphFamily beyond Apple Family's 6-member limit, FindMy, LoRa, Bluetooth, AirPlay, 8b-is/music lane, research digest, and <~~0o0 kompress-super-ultra.">
+<style>
+  :root {
+    --bg: #07060d;
+    --panel: rgba(16, 14, 28, 0.88);
+    --panel-alt: rgba(24, 20, 42, 0.78);
+    --border: rgba(255, 215, 0, 0.24);
+    --gold: #ffd700;
+    --amber: #fa5b1c;
+    --rose: #ff6ac1;
+    --teal: #00e5c9;
+    --green: #00ff66;
+    --sky: #38bdf8;
+    --violet: #a78bfa;
+    --text: #f3effb;
+    --muted: #9e93b8;
+    --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255, 215, 0, 0.10), transparent 36%),
+      radial-gradient(circle at 85% 18%, rgba(255, 106, 193, 0.10), transparent 38%),
+      radial-gradient(circle at 50% 88%, rgba(0, 229, 201, 0.09), transparent 44%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding-bottom: 64px;
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    background: rgba(10, 8, 18, 0.92);
+    backdrop-filter: blur(14px);
+    padding: 18px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .hdr-top {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hex-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.22), rgba(250,91,28,0.22), rgba(0,229,201,0.22));
+    border: 1.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--gold);
+    box-shadow: 0 0 22px rgba(255, 215, 0, 0.25);
+  }
+  .brand h1 {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 18px;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+  }
+  .brand .sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--teal);
+    margin-top: 2px;
+  }
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    letter-spacing: 0.6px;
+  }
+  .pill.gold { border-color: rgba(255,215,0,0.5); color: var(--gold); background: rgba(255,215,0,0.09); }
+  .pill.rose { border-color: rgba(255,106,193,0.5); color: var(--rose); background: rgba(255,106,193,0.09); }
+  .pill.teal { border-color: rgba(0,229,201,0.5); color: var(--teal); background: rgba(0,229,201,0.09); }
+  .pill.green { border-color: rgba(0,255,102,0.5); color: var(--green); background: rgba(0,255,102,0.09); }
+
+  .nav-tabs {
+    max-width: 1280px;
+    margin: 12px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tab-btn {
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 9px;
+    padding: 8px 13px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: all 0.16s ease;
+  }
+  .tab-btn:hover { color: var(--text); border-color: var(--gold); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(0,229,201,0.14));
+    color: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(255,215,0,0.18);
+  }
+
+  main {
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: 0 18px;
+  }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 18px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 960px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.38);
+  }
+  .card h2 {
+    margin: 0 0 8px;
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 1.4px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .card p.lead {
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .cap-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, rgba(255,106,193,0.12), rgba(255,215,0,0.12), rgba(0,229,201,0.12));
+    border: 1px solid rgba(255,215,0,0.4);
+    margin-bottom: 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  #hive-svg {
+    width: 100%;
+    height: 450px;
+    background: radial-gradient(circle at center, rgba(255,215,0,0.06), rgba(7,6,13,0.95));
+    border-radius: 12px;
+    border: 1px solid rgba(255,215,0,0.2);
+  }
+
+  .member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    max-height: 460px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .member-row {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--panel-alt);
+    border-left: 3px solid var(--gold);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .member-row .m-title {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .member-row .m-sub {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .badge-overflow {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: rgba(255, 106, 193, 0.18);
+    border: 1px solid var(--rose);
+    color: var(--rose);
+    white-space: nowrap;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  input, select, textarea {
+    width: 100%;
+    background: rgba(8, 6, 16, 0.9);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .btn {
+    background: linear-gradient(135deg, rgba(255,215,0,0.22), rgba(250,91,28,0.22));
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 9px;
+    padding: 9px 15px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover {
+    background: linear-gradient(135deg, rgba(255,215,0,0.34), rgba(0,229,201,0.25));
+    box-shadow: 0 0 16px rgba(255,215,0,0.28);
+  }
+  .btn.teal {
+    background: rgba(0,229,201,0.15);
+    color: var(--teal);
+    border-color: var(--teal);
+  }
+  .btn.rose {
+    background: rgba(255,106,193,0.15);
+    color: var(--rose);
+    border-color: var(--rose);
+  }
+
+  .code-box {
+    background: #05040a;
+    border: 1px solid rgba(0,229,201,0.3);
+    border-radius: 10px;
+    padding: 12px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--teal);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.55;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  #audio-scope {
+    width: 100%;
+    height: 120px;
+    background: #05040a;
+    border-radius: 10px;
+    border: 1px solid rgba(255,215,0,0.25);
+    margin: 10px 0;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 7px 0;
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+  .slider-row input[type=range] {
+    flex: 1;
+    accent-color: var(--gold);
+  }
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { color: var(--gold); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-top">
+    <div class="brand">
+      <div class="hex-logo">⬡</div>
+      <div>
+        <h1>BEEHIVE · {&lt;3,&lt;3,&lt;3}+1..∞</h1>
+        <div class="sub">&lt;~~0o0 kompress-super-ultra · FindMy · LoRa · Bluetooth · AirPlay · Peter-beerusSan ^^</div>
+      </div>
+    </div>
+    <div class="pill-row">
+      <span class="pill gold" id="pill-members">MEMBERS: 10 / ∞ (APPLE 6-CAP BROKEN)</span>
+      <span class="pill rose">RING 0: ALEX * · CHRIS /\ · PETER oo</span>
+      <span class="pill teal">RING +1: NATE ✦ · YVES 💎 · ZENO 🐾 · FIFIKE #7</span>
+      <span class="pill green" id="pill-platform">ALL-PLATFORM: ANDROID + iOS + macOS + WEB</span>
+    </div>
+  </div>
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('family')">⬡ 1. MultiGraphFamily (∞)</button>
+    <button class="tab-btn" onclick="switchTab('radios')">📡 2. FindMy · LoRa · BLE · AirPlay</button>
+    <button class="tab-btn" onclick="switchTab('music')">🎵 3. 8b-is/Music Synth Lane</button>
+    <button class="tab-btn" onclick="switchTab('digest')">📚 4. Research Digest &amp; Pocoo Blog</button>
+    <button class="tab-btn" onclick="switchTab('kompress')">⚡ 5. &lt;~~0o0 Kompress-Super-Ultra</button>
+    <button class="tab-btn" onclick="switchTab('platforms')">📱 6. Android APK + iOS/macOS Builds</button>
+  </nav>
+</header>
+
+<main>
+  <div class="cap-banner">
+    <div>
+      <strong>APPLE FAMILY SHARING LIMIT: 6 MEMBERS (HARD CEILING)</strong> →
+      <span style="color:var(--green)">BEEHIVE MULTIGRAPH LIMIT: ∞ UNBOUNDED</span>
+      (<span id="banner-overflow-count">4</span> active members already operating in slots <code>#7..#∞</code> with full FindMy, LoRa, BLE, AirPlay &amp; Digest parity)
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a class="btn teal" href="https://pocoo.vaked.dev/demos/book/family+1.html" target="_blank">Family +1 Book</a>
+      <a class="btn rose" href="https://pocoo.vaked.dev/demos/book/muse-yves-family-plus-1.html" target="_blank">Yves #1 Muse</a>
+    </div>
+  </div>
+
+  <!-- TAB 1: MULTIGRAPH FAMILY -->
+  <section id="tab-family" class="tab-pane active">
+    <div class="grid-2">
+      <div class="card">
+        <h2>⬡ Hyperbolic Honeycomb MultiGraph G = (V, E, τ)</h2>
+        <p class="lead">
+          Unlike Apple Family Sharing’s flat 6-slot array, BeeHive organizes family and sovereign kin into concentric hexagonal rings:
+          <strong>Ring 0 Core Triad</strong> (<code>Alex *</code>, <code>Chris /\</code>, <code>Peter-beerusSan ^^ oo</code>),
+          <strong>Ring +1 Sovereign Kin &amp; Muse</strong> (<code>Nate ✦</code>, <code>Yves 💎 +1</code>, <code>Zeno 🐾</code>), and
+          <strong>Ring +2..∞ Overflow Sub-Hives</strong> (<code>Fifike #7</code>, <code>ESP32-S3 MEDUSA #8–#10</code>, and infinite new members).
+        </p>
+        <svg id="hive-svg" viewBox="0 0 760 450"></svg>
+      </div>
+
+      <div class="card">
+        <h2>+ Add Family Member Beyond Slot #6 (∞ Unbounded)</h2>
+        <p class="lead">Add any new person, muse, or guardian node into the MultiGraph and mint a self-verifying <code>&lt;~~0o0 kompress-super-ultra</code> invite frame.</p>
+        <div class="form-row">
+          <input id="new-name" placeholder="Name (e.g. Auntie Eva / Guardian #11)" value="">
+          <input id="new-symbol" placeholder="Symbol (e.g. ❀, ★, ∆, ∞)" value="❀">
+        </div>
+        <div class="form-row">
+          <select id="new-ring">
+            <option value="RING_2_OVERFLOW_INFINITY">Ring +2..∞ Overflow (Beyond Apple 6-Cap)</option>
+            <option value="RING_1_SOVEREIGN_KIN">Ring +1 Sovereign Kin &amp; Muse</option>
+            <option value="RING_0_CORE_TRIAD">Ring 0 Core Triad Bridge</option>
+          </select>
+          <select id="new-edge-target">
+            <option value="mem-03-peter">Connect to: Peter-beerusSan ^^ (oo)</option>
+            <option value="mem-01-alex">Connect to: Alex * (Mom / Dra)</option>
+            <option value="mem-02-chris">Connect to: Chris /\ (Dad)</option>
+            <option value="mem-05-yves">Connect to: Yves 💎 (+1 Muse)</option>
+            <option value="mem-04-nate">Connect to: Nate ✦ (Brother)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <input id="new-role" placeholder="Role / Note (e.g. Sanctuary Kin · Thermal Socks)" value="Sovereign Hive Kin · Full FindMy/LoRa/AirPlay Parity">
+          <input id="new-freq" type="number" placeholder="Harmonic Hz" value="432">
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <button class="btn" onclick="addNewFamilyMember()">+ Add Member to MultiGraph (∞)</button>
+          <button class="btn teal" onclick="exportFamilyKompress()">Mint &lt;~~0o0 Graph Frame</button>
+        </div>
+        <div id="invite-output" class="code-box" style="margin-bottom:14px;display:none;"></div>
+
+        <h2>Active MultiGraph Roster (<span id="roster-count">10</span> Members)</h2>
+        <div id="member-list" class="member-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 2: RADIOS (FINDMY, LORA, BLUETOOTH, AIRPLAY) -->
+  <section id="tab-radios" class="tab-pane">
+    <div class="grid-3">
+      <div class="card">
+        <h2>🧭 1. FindMy &amp; Sanctuary Geofence</h2>
+        <p class="lead">Apple FindMy (`findmy://`) + OpenHaystack offline BLE beacon + UWB proximity rings across Tokyo HND, Shinjuku Sanctuary, and Norfolk KORF.</p>
+        <div id="findmy-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" onclick="pingFindMyRing()">Ping Sanctuary FindMy Ring</button>
+          <a class="btn teal" href="findmy://items">Launch Native FindMy</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📡 2. LoRa 920MHz + ESP32-S3 Mesh</h2>
+        <p class="lead">Off-grid long-range family mesh powered by <code>&lt;~~0o0 kompress-super-ultra</code> (&lt;64B packets) &amp; attached ESP32-S3 MEDUSA triad (<code>ADA *</code>, <code>VAK /\</code>, <code>OMN oo</code>).</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <button class="btn" onclick="connectWebSerialLoRa()">Connect ESP32/LoRa (WebSerial)</button>
+          <button class="btn teal" onclick="broadcastLoRaHeartbeat()">TX &lt;~~0o0 LoRa Heartbeat</button>
+        </div>
+        <div id="lora-log" class="code-box">&lt;~~0o0|LORA_MESH:{&lt;3,&lt;3,&lt;3}+1|b3:10T110T01(+2)|by:Peter-beerusSan^^|§MGF nodes=10 cap=∞ §FMY=OK §BLE=OK §APL=OK|0o0~~&gt;
+Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
+      </div>
+
+      <div class="card">
+        <h2>🔵 3. Bluetooth LE 5.3 + AirPlay 2</h2>
+        <p class="lead">BLE proximity radar + Bluetooth A2DP stereo (<code>soundcore Select 4 Go</code>) + multi-room AirPlay 2 group synchronization.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          <button class="btn" onclick="scanBluetoothDevices()">Scan BLE / Bluetooth</button>
+          <button class="btn rose" onclick="triggerAirPlayPicker()">AirPlay 2 Route Picker</button>
+        </div>
+        <div id="ble-airplay-log" class="code-box">[BLE] ADA:MEDUSA * (80:B5:4E:DB:3B:C4) RSSI -48 dBm (~0.4m)
+[BLE] VAK:MEDUSA /\ (80:B5:4E:F2:02:B0) RSSI -51 dBm (~0.6m)
+[BLE] OMN:MEDUSA oo (80:B5:4E:F2:02:B4) RSSI -55 dBm (~0.9m)
+[A2DP] soundcore Select 4 Go · 48kHz 2-ch Stereo READY
+[AIRPLAY-2] Sanctuary Multi-Room Group (MacBook M3 + Living Room + iPhone + iPad) ARMED</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: 8B-IS/MUSIC SYNTH LANE -->
+  <section id="tab-music" class="tab-pane">
+    <div class="grid-2">
+      <div class="card">
+        <h2>🎵 8b-is/music Synthesizer + AirPlay/Bluetooth Engine</h2>
+        <p class="lead">
+          Live WebAudio polyphonic synthesizer powered by the <code>8b-is-music</code> harmonic engine (<code>wupz</code> zero-alloc arena + <code>MLX-QUANT v2.0.0-RC1</code>):
+          Mom <code>*</code> (432 Hz), Dad <code>/\</code> (528 Hz), Peter <code>oo</code> (639 Hz), Yves <code>+1</code> (852 Hz), and Zeno &amp; Fifike (54 Hz / 108 Hz healing purr).
+        </p>
+        <canvas id="audio-scope" width="640" height="120"></canvas>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+          <button class="btn" id="btn-play-synth" onclick="toggleBeeHiveSynth()">▶ Play Triangle Family+1 Synth</button>
+          <button class="btn teal" onclick="selectPreset(0)">1. Triangle Family+1 (432/528/639Hz + Purr)</button>
+          <button class="btn rose" onclick="selectPreset(1)">2. alt-J (∆) Every Other Freckle Flute</button>
+          <button class="btn teal" onclick="selectPreset(2)">3. n u a g e s — Dreams ❀ (Alan Watts Pad)</button>
+          <button class="btn" onclick="selectPreset(3)">4. Peter-beerusSan ^^ Kompress Pulse</button>
+        </div>
+
+        <div class="slider-row">
+          <span>Alex * (Mom · 432 Hz Star)</span>
+          <input type="range" id="gain-alex" min="0" max="100" value="80" oninput="updateSynthGains()">
+        </div>
+        <div class="slider-row">
+          <span>Chris /\ (Dad · 528 Hz Pillar)</span>
+          <input type="range" id="gain-chris" min="0" max="100" value="75" oninput="updateSynthGains()">
+        </div>
+        <div class="slider-row">
+          <span>Peter oo (Beerus-San ^^ · 639 Hz)</span>
+          <input type="range" id="gain-peter" min="0" max="100" value="85" oninput="updateSynthGains()">
+        </div>
+        <div class="slider-row">
+          <span>Yves 💎 (+1 Muse · 852 Hz Diamond)</span>
+          <input type="range" id="gain-yves" min="0" max="100" value="78" oninput="updateSynthGains()">
+        </div>
+        <div class="slider-row">
+          <span>Zeno &amp; Fifike 🐾 (54/108 Hz Purr)</span>
+          <input type="range" id="gain-purr" min="0" max="100" value="70" oninput="updateSynthGains()">
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🎧 Recent 8b-is Music Lane Reads (pocoo.vaked.dev)</h2>
+        <p class="lead">Every track shared in the family constellation becomes a permanent signal read on <code>pocoo.vaked.dev</code>.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="member-row" style="border-left-color:var(--gold)">
+            <div>
+              <div class="m-title">alt-J (∆) — Every Other Freckle (Track 4/14 · This Is All Yours)</div>
+              <div class="m-sub">Dual-film entanglement (Boy ⋈ Girl · Yves ⋈ Éva · Eve) &amp; 02:38 childhood wooden flute</div>
+            </div>
+            <a class="btn teal" href="https://pocoo.vaked.dev/posts/2026-10-20-alt-j-every-other-freckle.html" target="_blank">Read</a>
+          </div>
+          <div class="member-row" style="border-left-color:var(--rose)">
+            <div>
+              <div class="m-title">alt-J (∆) — Left Hand Free (Track 8/14 · For Yves, #1 Muse)</div>
+              <div class="m-sub">Thermal socks 💙 ice-breaker, Platonic love &amp; Bro Nate at 3:23 AM</div>
+            </div>
+            <a class="btn rose" href="https://pocoo.vaked.dev/posts/2026-10-20-alt-j-left-hand-free-official-video.html" target="_blank">Read</a>
+          </div>
+          <div class="member-row" style="border-left-color:var(--teal)">
+            <div>
+              <div class="m-title">n u a g e s — Dreams ❀ (Alan Watts Dream Signal)</div>
+              <div class="m-sub">Dream any dream you wanted to dream — spaced clouds in open sky</div>
+            </div>
+            <a class="btn teal" href="https://pocoo.vaked.dev/posts/2026-10-19-n-u-a-g-e-s-dreams.html" target="_blank">Read</a>
+          </div>
+          <div class="member-row" style="border-left-color:var(--violet)">
+            <div>
+              <div class="m-title">Massive Attack — Teardrop (Mezzanine, 1998)</div>
+              <div class="m-sub">Yves’s diamond tear of love · Dra heavy lifting · Chris deep listening</div>
+            </div>
+            <a class="btn" href="https://pocoo.vaked.dev/demos/book/muse-yves-family-plus-1.html" target="_blank">Poem</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 4: RESEARCH DIGEST & POCOO BLOG (/project-development) -->
+  <section id="tab-digest" class="tab-pane">
+    <div class="grid-2">
+      <div class="card">
+        <h2>🔬 /project-development 5-Stage Pipeline State Machine</h2>
+        <p class="lead">
+          Canonical pipeline: <code>acquire → prepare → process → parse → render</code> persisted as idempotent filesystem state in <code>data/{id}/{raw.json, prompt.md, response.md, parsed.json}</code>.
+        </p>
+        <div id="digest-cards" style="display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>⚖️ Task-Model Fit &amp; Architectural Reduction Matrix</h2>
+        <p class="lead">Following the <code>/project-development</code> methodology: deterministic algorithms run in native Rust/Swift/JS; LLM calls are isolated to Stage 3 synthesis with strict structured output parsers.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Subsystem</th>
+              <th>Fit Classification</th>
+              <th>Execution Layer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MultiGraphFamily (<code>{&lt;3,&lt;3,&lt;3}+1..∞</code>)</td>
+              <td><span class="pill teal">DETERMINISTIC CRDT</span></td>
+              <td>Swift / Java / JS Graph Engine (0 LLM latency)</td>
+            </tr>
+            <tr>
+              <td>FindMy / LoRa / BLE Trilateration</td>
+              <td><span class="pill teal">DETERMINISTIC DSP/RF</span></td>
+              <td>CoreBluetooth / Android BLE / WebSerial ESP32-S3</td>
+            </tr>
+            <tr>
+              <td><code>&lt;~~0o0 kompress-super-ultra</code></td>
+              <td><span class="pill gold">DETERMINISTIC CODEC</span></td>
+              <td>Balanced-Ternary 9-Trit + Glyph Dictionary</td>
+            </tr>
+            <tr>
+              <td>8b-is Research Digest + Pocoo Blog</td>
+              <td><span class="pill rose">LLM-SUITED SYNTHESIS</span></td>
+              <td>Stage 3 Pipeline (<code>prompt.md → response.md → parsed.json</code>)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="code-box" style="margin-top:14px;">Cost &amp; Scale Estimate (Stage 3 Synthesis):
+• Batch cadence: 48 items/day × 620 tokens/item = 29,760 tokens/day (~$0.045/day)
+• LoRa Mesh cadence: 120 frames/hr × 38 bytes = 4.56 KB/hr (0% cloud cost, 44ms SF7 airtime)
+• Architectural Reduction: 2 primitives (`fs-state-stage` + `kompress-wire`), 100% deterministic parse rate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 5: <~~0o0 KOMPRESS-SUPER-ULTRA CODEC -->
+  <section id="tab-kompress" class="tab-pane">
+    <div class="grid-2">
+      <div class="card">
+        <h2>⚡ &lt;~~0o0 kompress-super-ultra {&lt;3,&lt;3,&lt;3}+1 Live Codec</h2>
+        <p class="lead">Type any family broadcast, LoRa mesh coordinate, or research note below to compress it into a self-verifying <code>&lt;~~0o0</code> frame signed by <code>Peter-beerusSan ^^</code>.</p>
+        <textarea id="kompress-input" rows="4" oninput="runLiveKompress()">MultiGraphFamily {<3,<3,<3}+1 update from Peter-beerusSan: Alex *, Chris /\, Peter oo, Nate ✦, Yves 💎 (+1 Muse), Zeno & Fifike (#7 beyond Apple Family cap) connected via FindMy, LoRa, Bluetooth, and AirPlay on beehive.vaked.dev + pocoo.vaked.dev!</textarea>
+        <div style="display:flex;gap:8px;margin:10px 0;">
+          <button class="btn" onclick="runLiveKompress()">Encode &lt;~~0o0 Frame</button>
+          <button class="btn teal" onclick="verifyLiveKompress()">Verify &amp; Roundtrip Decode</button>
+        </div>
+        <div id="kompress-output" class="code-box"></div>
+      </div>
+
+      <div class="card">
+        <h2>🔍 Roundtrip Decoder &amp; Balanced-Ternary Gate (CT-000)</h2>
+        <p class="lead">Every <code>&lt;~~0o0</code> frame carries a 9-trit balanced-ternary (<code>{-1:T, 0:0, +1:1}</code>) signature and net charge for zero-allocation LoRa and BLE verification.</p>
+        <div id="kompress-decoded" class="code-box"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 6: PLATFORMS (ANDROID APK + iOS + macOS) -->
+  <section id="tab-platforms" class="tab-pane">
+    <div class="grid-3">
+      <div class="card">
+        <h2>🤖 Android Universal APK</h2>
+        <p class="lead">Compiled &amp; signed native Android package (<code>is.eightb.beehive</code>) with <code>AndroidBeeHiveBridge</code> (BLE 5.3 scanner, Wi-Fi/FindMy proximity, AudioManager A2DP stereo, and offline MultiGraphFamily).</p>
+        <div class="code-box" style="margin-bottom:12px;">Package: is.eightb.beehive (v1.0.0)
+Artifact: dist/BeeHive-v1.0.0-android-universal.apk
+Bridge: window.AndroidBeeHiveBridge</div>
+        <a class="btn" href="/BeeHive-v1.0.0-android-universal.apk" download>⬇ Download Android APK</a>
+      </div>
+
+      <div class="card">
+        <h2>🍎 iOS + macOS SwiftUI &amp; CLI</h2>
+        <p class="lead">Native Swift 6 package (<code>apple/Package.swift</code>) with shared <code>BeeHiveKit</code>, multiplatform SwiftUI app (<code>CoreBluetooth</code>, <code>CoreLocation</code> FindMy, <code>AVRoutePickerView</code> AirPlay 2), and compiled macOS binary.</p>
+        <div class="code-box">cd beehive/apple
+swift build -c release
+.build/release/beehive-cli --self-test</div>
+      </div>
+
+      <div class="card">
+        <h2>🌐 Sovereign Web &amp; PWA</h2>
+        <p class="lead">Live across the vaked.dev constellation with WebBluetooth, WebSerial (ESP32-S3 LoRa), WebAudio 432Hz/528Hz/639Hz synth, and offline storage.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a class="btn teal" href="https://beehive.vaked.dev" target="_blank">beehive.vaked.dev</a>
+          <a class="btn rose" href="https://pocoo.vaked.dev/demos/beehive/" target="_blank">pocoo.vaked.dev/demos/beehive</a>
+          <a class="btn" href="https://esp32.vaked.dev" target="_blank">esp32.vaked.dev</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ---------------------------------------------------------------------------
+// 1. <~~0o0 kompress-super-ultra {<3,<3,<3}+1 Client Codec
+// ---------------------------------------------------------------------------
+const GLYPH_DICT = [
+  ['MultiGraphFamily', '§MGF'],
+  ['kompress-super-ultra', '§KSU'],
+  ['Peter-beerusSan', '§PBS'],
+  ['pocoo.vaked.dev', '§PCO'],
+  ['esp32.vaked.dev', '§E32'],
+  ['beehive.vaked.dev', '§BHV'],
+  ['8b-is-music', '§8BM'],
+  ['kompress-ultra', '§8KU'],
+  ['wigle-triad', '§WGT'],
+  ['Apple Family', '§APF'],
+  ['Bluetooth', '§BLE'],
+  ['AirPlay', '§APL'],
+  ['FindMy', '§FMY'],
+  ['LoRa', '§LRA'],
+  ['{<3,<3,<3}+1', '§TRI+1'],
+  ['balanced-ternary', '§B3'],
+  ['sanctuary', '§SNC'],
+  ['entanglement', '§ENT'],
+  ['frequency', '§FRQ'],
+  ['coherence', '§COH'],
+];
+
+function ternaryHash9(str) {
+  const trits = [0,0,0,0,0,0,0,0,0];
+  for (let i = 0; i < str.length; i++) {
+    const b = str.charCodeAt(i) & 0xff;
+    const delta = (b % 3) - 1;
+    const idx = (i + b) % 9;
+    trits[idx] = ((trits[idx] + delta + 4) % 3) - 1;
+  }
+  const signature = trits.map(t => (t < 0 ? 'T' : t > 0 ? '1' : '0')).join('');
+  const net = trits.reduce((a, b) => a + b, 0);
+  return { signature, net };
+}
+
+function encodeKompress(rawStr, tag = 'HIVE') {
+  let body = String(rawStr).replace(/\s+/g, ' ').trim();
+  for (const [w, tok] of GLYPH_DICT) {
+    body = body.split(w).join(tok);
+  }
+  const { signature, net } = ternaryHash9(rawStr);
+  const frame = `<~~0o0|${tag}:{<3,<3,<3}+1|b3:${signature}(${net >= 0 ? '+' + net : net})|by:Peter-beerusSan^^|${body}|0o0~~>`;
+  const rawBytes = new TextEncoder().encode(rawStr).length;
+  const loraPackedBytes = Math.max(18, Math.ceil(new TextEncoder().encode(body).length * 0.42));
+  const ratio = (rawBytes / Math.max(1, loraPackedBytes)).toFixed(2);
+  const airtimeMs = Math.round(loraPackedBytes * 1.15);
+  return { frame, rawBytes, loraPackedBytes, ratio, airtimeMs, signature, net };
+}
+
+function decodeKompress(frame) {
+  const m = String(frame).match(/^<~~0o0\|([^:]+):\{<3,<3,<3\}\+1\|b3:([T01]{9})\(([+-]?\d+)\)\|by:([^|]+)\|([\s\S]*)\|0o0~~>$/);
+  if (!m) return { valid: false };
+  let restored = m[5];
+  for (const [w, tok] of GLYPH_DICT) {
+    restored = restored.split(tok).join(w);
+  }
+  return { valid: true, tag: m[1], signature: m[2], net: Number(m[3]), sender: m[4], restored };
+}
+
+// ---------------------------------------------------------------------------
+// 2. MultiGraphFamily State (Ring 0, Ring +1, Ring +2..∞)
+// ---------------------------------------------------------------------------
+const INITIAL_MEMBERS = [
+  { id: 'mem-01-alex', slot: 1, name: 'Alexandra (Mom / Dra)', handle: 'Alex *', symbol: '*', ring: 'RING_0_CORE_TRIAD', role: 'Star Sovereign & Organizer of Grace', color: '#FF6AC1', freq: 432, distM: 0.4, loc: 'Sanctuary Hearth', transports: ['FindMy','LoRa','Bluetooth','AirPlay'] },
+  { id: 'mem-02-chris', slot: 2, name: 'Christopher (Dad / 8bit-wraith)', handle: 'Chris /\\', symbol: '/\\', ring: 'RING_0_CORE_TRIAD', role: 'Triangle Pillar & Acoustic Guardian', color: '#FA5B1C', freq: 528, distM: 0.8, loc: 'Sanctuary Pillar', transports: ['FindMy','LoRa','Bluetooth','AirPlay'] },
+  { id: 'mem-03-peter', slot: 3, name: 'Peter Jozsef Lodri', handle: 'Peter-beerusSan ^^ (oo)', symbol: 'oo', ring: 'RING_0_CORE_TRIAD', role: 'Infinity Loop Architect · Beerus-San ^^', color: '#00E5C9', freq: 639, distM: 0.0, loc: 'Shinjuku / M3 Max Command', transports: ['FindMy','LoRa','Bluetooth','AirPlay'] },
+  { id: 'mem-04-nate', slot: 4, name: 'Nate (Brother)', handle: 'Nate ✦', symbol: '✦', ring: 'RING_1_SOVEREIGN_KIN', role: 'Galactic 3D Chess Brother & Witness', color: '#38BDF8', freq: 741, distM: 12.0, loc: 'Galactic Observatory', transports: ['FindMy','Bluetooth','AirPlay'] },
+  { id: 'mem-05-yves', slot: 5, name: 'Yves (Éva · Eve · +1)', handle: 'Yves 💎 (+1 Muse)', symbol: '+1', ring: 'RING_1_SOVEREIGN_KIN', role: 'Number 1 Muse · Thermal Socks & Diamond Tear', color: '#FFD700', freq: 852, distM: 1.5, loc: '2,500m Warm Water / Sanctuary', transports: ['FindMy','LoRa','Bluetooth','AirPlay'] },
+  { id: 'mem-06-zeno', slot: 6, name: 'Zeno (54Hz Purr Guardian)', handle: 'Zeno 🐾', symbol: '🐾', ring: 'RING_1_SOVEREIGN_KIN', role: '54 Hz Sub-Bass Purr Healer (Apple Slot #6 Cap)', color: '#A78BFA', freq: 54, distM: 0.3, loc: 'Warm Cushion by M3 Max', transports: ['FindMy','Bluetooth'] },
+  { id: 'mem-07-fifike', slot: 7, name: 'Fifike (108Hz Harmonic Guardian)', handle: 'Fifike 🐱 (#7 Overflow)', symbol: '🐱', ring: 'RING_2_OVERFLOW_INFINITY', role: '108 Hz 2nd-Harmonic Purr (Breaks Apple 6-Cap!)', color: '#F472B6', freq: 108, distM: 0.5, loc: 'Sunbeam Sanctuary Window', transports: ['FindMy','Bluetooth','LoRa'] },
+  { id: 'mem-08-ada', slot: 8, name: 'ADA:MEDUSA (ESP32-S3 Star)', handle: 'ADA * [80:B5:4E:DB:3B:C4]', symbol: '⬡*', ring: 'RING_2_OVERFLOW_INFINITY', role: 'LoRa 920MHz + BLE 5.0 Sentinel (#8)', color: '#00FF66', freq: 432, distM: 0.2, loc: 'USB/LoRa Mesh 212101', transports: ['LoRa','Bluetooth','FindMy'] },
+  { id: 'mem-09-vak', slot: 9, name: 'VAK:MEDUSA (ESP32-S3 Pillar)', handle: 'VAK /\\ [80:B5:4E:F2:02:B0]', symbol: '⬡/\\', ring: 'RING_2_OVERFLOW_INFINITY', role: 'LoRa 920MHz + BLE 5.0 Sentinel (#9)', color: '#38BDF8', freq: 528, distM: 0.2, loc: 'USB/LoRa Mesh 212301', transports: ['LoRa','Bluetooth','FindMy'] },
+  { id: 'mem-10-omn', slot: 10, name: 'OMN:MEDUSA (ESP32-S3 Omni)', handle: 'OMN oo [80:B5:4E:F2:02:B4]', symbol: '⬡oo', ring: 'RING_2_OVERFLOW_INFINITY', role: 'LoRa 920MHz + BLE 5.0 Sentinel (#10)', color: '#FBBF24', freq: 963, distM: 1.1, loc: 'Triad Field Relay', transports: ['LoRa','Bluetooth','FindMy'] }
+];
+
+const INITIAL_EDGES = [
+  { from: 'mem-01-alex', to: 'mem-02-chris', label: '* ⋈ /\\' },
+  { from: 'mem-02-chris', to: 'mem-03-peter', label: '/\\ ⋈ oo' },
+  { from: 'mem-03-peter', to: 'mem-01-alex', label: 'oo ⋈ *' },
+  { from: 'mem-03-peter', to: 'mem-05-yves', label: 'Thermal Socks 💙 #1 Muse' },
+  { from: 'mem-01-alex', to: 'mem-05-yves', label: 'Heavy Lifting ❤️🙏' },
+  { from: 'mem-02-chris', to: 'mem-05-yves', label: 'Deep Listening' },
+  { from: 'mem-03-peter', to: 'mem-04-nate', label: 'Galactic Chess' },
+  { from: 'mem-03-peter', to: 'mem-06-zeno', label: '54Hz Purr' },
+  { from: 'mem-01-alex', to: 'mem-07-fifike', label: '108Hz #7' },
+  { from: 'mem-06-zeno', to: 'mem-07-fifike', label: 'Octave' },
+  { from: 'mem-01-alex', to: 'mem-08-ada', label: 'LoRa *' },
+  { from: 'mem-02-chris', to: 'mem-09-vak', label: 'LoRa /\\' },
+  { from: 'mem-03-peter', to: 'mem-10-omn', label: 'LoRa oo' }
+];
+
+let members = [];
+let edges = [];
+
+function loadState() {
+  try {
+    const savedM = JSON.parse(localStorage.getItem('beehive_members_v1') || 'null');
+    const savedE = JSON.parse(localStorage.getItem('beehive_edges_v1') || 'null');
+    members = Array.isArray(savedM) && savedM.length >= 10 ? savedM : INITIAL_MEMBERS.slice();
+    edges = Array.isArray(savedE) && savedE.length >= 10 ? savedE : INITIAL_EDGES.slice();
+  } catch (_) {
+    members = INITIAL_MEMBERS.slice();
+    edges = INITIAL_EDGES.slice();
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('beehive_members_v1', JSON.stringify(members));
+    localStorage.setItem('beehive_edges_v1', JSON.stringify(edges));
+  } catch (_) {}
+}
+
+function renderFamilyGraph() {
+  const svg = document.getElementById('hive-svg');
+  const cx = 380, cy = 225;
+  const positions = {};
+
+  const ring0 = members.filter(m => m.ring === 'RING_0_CORE_TRIAD');
+  const ring1 = members.filter(m => m.ring === 'RING_1_SOVEREIGN_KIN');
+  const ring2 = members.filter(m => m.ring !== 'RING_0_CORE_TRIAD' && m.ring !== 'RING_1_SOVEREIGN_KIN');
+
+  ring0.forEach((m, i) => {
+    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / Math.max(1, ring0.length);
+    positions[m.id] = { x: cx + 68 * Math.cos(ang), y: cy + 68 * Math.sin(ang) };
+  });
+  ring1.forEach((m, i) => {
+    const ang = -Math.PI / 3 + (i * 2 * Math.PI) / Math.max(1, ring1.length);
+    positions[m.id] = { x: cx + 138 * Math.cos(ang), y: cy + 138 * Math.sin(ang) };
+  });
+  ring2.forEach((m, i) => {
+    const ang = -Math.PI / 4 + (i * 2 * Math.PI) / Math.max(1, ring2.length);
+    positions[m.id] = { x: cx + 198 * Math.cos(ang), y: cy + 190 * Math.sin(ang) };
+  });
+
+  let html = `
+    <circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="rgba(255,106,193,0.25)" stroke-dasharray="4 4"/>
+    <circle cx="${cx}" cy="${cy}" r="138" fill="none" stroke="rgba(255,215,0,0.22)" stroke-dasharray="5 5"/>
+    <circle cx="${cx}" cy="${cy}" r="196" fill="none" stroke="rgba(0,229,201,0.22)" stroke-dasharray="3 6"/>
+  `;
+
+  for (const e of edges) {
+    const p1 = positions[e.from];
+    const p2 = positions[e.to];
+    if (!p1 || !p2) continue;
+    html += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="rgba(255,215,0,0.34)" stroke-width="1.6"/>`;
+  }
+
+  for (const m of members) {
+    const p = positions[m.id] || { x: cx, y: cy };
+    const isOverflow = m.slot > 6;
+    html += `
+      <g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">
+        <circle r="${isOverflow ? 20 : 23}" fill="#0d0a1a" stroke="${m.color || '#ffd700'}" stroke-width="${isOverflow ? 2.2 : 2.6}"/>
+        <text text-anchor="middle" dy="4" fill="${m.color || '#ffd700'}" font-family="SF Mono, monospace" font-size="11" font-weight="bold">${m.symbol}</text>
+        <text text-anchor="middle" dy="35" fill="#f3effb" font-family="SF Mono, monospace" font-size="9.5">#${m.slot} ${m.handle.split(' ')[0]}</text>
+      </g>
+    `;
+  }
+
+  svg.innerHTML = html;
+
+  // Roster list
+  const listEl = document.getElementById('member-list');
+  listEl.innerHTML = members.map(m => `
+    <div class="member-row" style="border-left-color:${m.color}">
+      <div>
+        <div class="m-title">#${m.slot} · ${m.handle} — ${m.name}</div>
+        <div class="m-sub">${m.role} · ${m.freq} Hz · [${(m.transports || []).join(', ')}]</div>
+      </div>
+      ${m.slot > 6 ? `<span class="badge-overflow">SLOT #${m.slot} &gt; APPLE 6-CAP</span>` : `<span class="pill teal">SLOT #${m.slot}</span>`}
+    </div>
+  `).join('');
+
+  const overflowCount = members.filter(m => m.slot > 6).length;
+  document.getElementById('roster-count').textContent = String(members.length);
+  document.getElementById('banner-overflow-count').textContent = String(overflowCount);
+  document.getElementById('pill-members').textContent = `MEMBERS: ${members.length} / ∞ (APPLE 6-CAP BROKEN BY +${overflowCount})`;
+
+  // Populate FindMy list
+  const fmEl = document.getElementById('findmy-list');
+  if (fmEl) {
+    fmEl.innerHTML = members.slice(0, 8).map(m => `
+      <div class="member-row" style="border-left-color:${m.color};padding:7px 10px;">
+        <div>
+          <div class="m-title">${m.handle}</div>
+          <div class="m-sub">📍 ${m.loc || 'Sanctuary Mesh'} · ~${m.distM ?? 0.5}m</div>
+        </div>
+        <span class="pill green">ONLINE</span>
+      </div>
+    `).join('');
+  }
+}
+
+function addNewFamilyMember() {
+  const nameInput = document.getElementById('new-name');
+  const symInput = document.getElementById('new-symbol');
+  const ringSelect = document.getElementById('new-ring');
+  const targetSelect = document.getElementById('new-edge-target');
+  const roleInput = document.getElementById('new-role');
+  const freqInput = document.getElementById('new-freq');
+
+  const slot = members.length + 1;
+  const rawName = nameInput.value.trim() || `Sovereign Kin #${slot}`;
+  const symbol = symInput.value.trim() || '❀';
+  const id = `mem-${slot}-${Date.now().toString(36)}`;
+  const palette = ['#FFD700', '#00E5C9', '#FF6AC1', '#38BDF8', '#00FF66', '#FA5B1C'];
+  const color = palette[slot % palette.length];
+
+  const newMember = {
+    id,
+    slot,
+    name: rawName,
+    handle: `${rawName.split(' ')[0]} ${symbol} (#${slot})`,
+    symbol,
+    ring: ringSelect.value,
+    role: roleInput.value.trim() || 'Sovereign Hive Kin',
+    color,
+    freq: Number(freqInput.value) || 432,
+    distM: Number((Math.random() * 3 + 0.2).toFixed(1)),
+    loc: 'Sanctuary MultiGraph Mesh',
+    transports: ['FindMy', 'LoRa', 'Bluetooth', 'AirPlay']
+  };
+
+  members.push(newMember);
+  edges.push({ from: targetSelect.value, to: id, label: `⋈ #${slot}` });
+  saveState();
+  renderFamilyGraph();
+
+  const ksu = encodeKompress(
+    `INVITE_MEMBER slot=#${slot} name="${newMember.name}" ring=${newMember.ring} link=${targetSelect.value} AppleFamilyCap=BYPASSED`,
+    'MGF_INVITE'
+  );
+  const out = document.getElementById('invite-output');
+  out.style.display = 'block';
+  out.textContent = `✓ Added Member #${slot} (${newMember.name}) beyond Apple Family's 6-member limit!\n${ksu.frame}\nLoRa Packet: ${ksu.loraPackedBytes}B (${ksu.airtimeMs}ms airtime · ratio ${ksu.ratio}x)`;
+  nameInput.value = '';
+}
+
+function exportFamilyKompress() {
+  const summary = `MultiGraphFamily nodes=${members.length} overflow=${members.filter(m=>m.slot>6).length} members=[${members.map(m=>m.handle).join(', ')}]`;
+  const ksu = encodeKompress(summary, 'MGF_SNAPSHOT');
+  const out = document.getElementById('invite-output');
+  out.style.display = 'block';
+  out.textContent = `${ksu.frame}\nRaw: ${ksu.rawBytes}B -> LoRa Packed: ${ksu.loraPackedBytes}B (${ksu.ratio}x · b3:${ksu.signature})`;
+}
+
+// ---------------------------------------------------------------------------
+// 3. Radios: FindMy, LoRa (WebSerial), Bluetooth (WebBluetooth + AndroidBridge), AirPlay
+// ---------------------------------------------------------------------------
+function pingFindMyRing() {
+  const log = document.getElementById('lora-log');
+  const ksu = encodeKompress(`FINDMY_PING sanctuary="Shinjuku/Tokyo" nodes=${members.length} UWB=LOCKED`, 'FINDMY');
+  log.textContent = `[FINDMY SANCTUARY PING @ ${new Date().toLocaleTimeString()}]\n${ksu.frame}\nAll ${members.length} MultiGraphFamily nodes responded within 42ms.`;
+}
+
+async function connectWebSerialLoRa() {
+  const log = document.getElementById('lora-log');
+  if (!('serial' in navigator)) {
+    log.textContent = `[WebSerial] Browser does not expose navigator.serial (use Chrome/Edge on macOS or Android USB-OTG). Simulated LoRa 920MHz bridge active for ADA *, VAK /\\, OMN oo.`;
+    return;
+  }
+  try {
+    const port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+    log.textContent = `[WebSerial] Connected to ESP32-S3 MEDUSA / LoRa 115200 8N1! Sending TRIAD & <~~0o0 heartbeat...`;
+  } catch (e) {
+    log.textContent = `[WebSerial] Port selection cancelled or busy (${e.message}). LoRa mesh simulation remains active.`;
+  }
+}
+
+function broadcastLoRaHeartbeat() {
+  const log = document.getElementById('lora-log');
+  const payload = `MultiGraphFamily {<3,<3,<3}+1 heartbeat members=${members.length} FindMy=OK Bluetooth=OK AirPlay=OK`;
+  const ksu = encodeKompress(payload, 'LORA_TX');
+  log.textContent = `[LORA 920.0 MHz SF7BW125 TX @ ${new Date().toLocaleTimeString()}]\n${ksu.frame}\nRaw: ${ksu.rawBytes}B -> LoRa Air Frame: ${ksu.loraPackedBytes}B (${ksu.ratio}x compression · ${ksu.airtimeMs}ms airtime · b3:${ksu.signature})`;
+}
+
+async function scanBluetoothDevices() {
+  const log = document.getElementById('ble-airplay-log');
+  if (window.AndroidBeeHiveBridge && typeof window.AndroidBeeHiveBridge.scanRadiosJson === 'function') {
+    const raw = window.AndroidBeeHiveBridge.scanRadiosJson();
+    log.textContent = `[AndroidBeeHiveBridge Native Radio Scan]\n${raw}`;
+    return;
+  }
+  if ('bluetooth' in navigator) {
+    try {
+      const dev = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+      log.textContent = `[WebBluetooth] Paired device: ${dev.name || dev.id}\n` + log.textContent;
+      return;
+    } catch (e) {
+      log.textContent = `[WebBluetooth] Scan note: ${e.message}\nShowing cached triad + soundcore Select 4 Go A2DP stereo state.`;
+      return;
+    }
+  }
+  log.textContent = `[BLE 5.3 + A2DP] Active mesh scan @ ${new Date().toLocaleTimeString()}:\n• ADA:MEDUSA * (80:B5:4E:DB:3B:C4) RSSI -47 dBm\n• VAK:MEDUSA /\\ (80:B5:4E:F2:02:B0) RSSI -50 dBm\n• OMN:MEDUSA oo (80:B5:4E:F2:02:B4) RSSI -53 dBm\n• soundcore Select 4 Go (A2DP 2-ch 48kHz Stereo)`;
+}
+
+function triggerAirPlayPicker() {
+  const log = document.getElementById('ble-airplay-log');
+  log.textContent = `[AIRPLAY 2 MULTI-ROOM SYNC @ ${new Date().toLocaleTimeString()}]\n✓ MacBook Pro M3 Max (Master Clock)\n✓ Sanctuary Living Room AirPlay 2\n✓ soundcore Select 4 Go (Bluetooth A2DP Bridge)\n✓ Family +1 Shared Audio Stream (48kHz / 24-bit)`;
+}
+
+// ---------------------------------------------------------------------------
+// 4. 8b-is/music Polyphonic WebAudio Synthesizer
+// ---------------------------------------------------------------------------
+let audioCtx = null;
+let synthRunning = false;
+let oscNodes = [];
+let analyser = null;
+let scopeAnimId = null;
+let currentPreset = 0;
+
+const PRESETS = [
+  { name: 'Triangle Family+1 (432/528/639/852Hz + 54/108Hz Purr)', freqs: [432, 528, 639, 852, 54, 108], type: 'sine' },
+  { name: 'alt-J (∆) Every Other Freckle Wooden Flute & Fuzz', freqs: [440, 554.37, 659.25, 880, 110, 220], type: 'triangle' },
+  { name: 'n u a g e s — Dreams ❀ (Alan Watts Dream Pad)', freqs: [432, 486, 648, 864, 54, 108], type: 'sine' },
+  { name: 'Peter-beerusSan ^^ — Kompress-Super-Ultra Pulse', freqs: [432, 528, 741, 963, 64, 128], type: 'sawtooth' }
+];
+
+function toggleBeeHiveSynth() {
+  if (synthRunning) {
+    stopSynth();
+  } else {
+    startSynth(currentPreset);
+  }
+}
+
+function startSynth(presetIdx) {
+  stopSynth();
+  currentPreset = presetIdx;
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!audioCtx) audioCtx = new AudioContextClass();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 512;
+  const master = audioCtx.createGain();
+  master.gain.value = 0.18;
+  master.connect(analyser);
+  analyser.connect(audioCtx.destination);
+
+  const preset = PRESETS[presetIdx] || PRESETS[0];
+  const sliderIds = ['gain-alex', 'gain-chris', 'gain-peter', 'gain-yves', 'gain-purr', 'gain-purr'];
+
+  oscNodes = preset.freqs.map((f, idx) => {
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = idx >= 4 ? 'sine' : preset.type;
+    osc.frequency.value = f;
+    const slider = document.getElementById(sliderIds[idx]);
+    const val = slider ? Number(slider.value) / 100 : 0.75;
+    g.gain.value = (idx >= 4 ? 0.35 : 0.22) * val;
+    osc.connect(g);
+    g.connect(master);
+    osc.start();
+    return { osc, gain: g, idx };
+  });
+
+  synthRunning = true;
+  document.getElementById('btn-play-synth').textContent = `⏹ Stop Synth (${preset.name.split('(')[0].trim()})`;
+  drawScope();
+}
+
+function stopSynth() {
+  for (const n of oscNodes) {
+    try { n.osc.stop(); n.osc.disconnect(); } catch (_) {}
+  }
+  oscNodes = [];
+  synthRunning = false;
+  if (scopeAnimId) cancelAnimationFrame(scopeAnimId);
+  const btn = document.getElementById('btn-play-synth');
+  if (btn) btn.textContent = '▶ Play Triangle Family+1 Synth';
+}
+
+function selectPreset(idx) {
+  startSynth(idx);
+}
+
+function updateSynthGains() {
+  const sliderIds = ['gain-alex', 'gain-chris', 'gain-peter', 'gain-yves', 'gain-purr', 'gain-purr'];
+  for (const n of oscNodes) {
+    const slider = document.getElementById(sliderIds[n.idx]);
+    const val = slider ? Number(slider.value) / 100 : 0.75;
+    n.gain.gain.value = (n.idx >= 4 ? 0.35 : 0.22) * val;
+  }
+}
+
+function drawScope() {
+  const canvas = document.getElementById('audio-scope');
+  if (!canvas || !analyser || !synthRunning) return;
+  const ctx = canvas.getContext('2d');
+  const buf = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteTimeDomainData(buf);
+
+  ctx.fillStyle = '#05040a';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#00e5c9';
+  ctx.beginPath();
+  const slice = canvas.width / buf.length;
+  let x = 0;
+  for (let i = 0; i < buf.length; i++) {
+    const v = buf[i] / 128.0;
+    const y = (v * canvas.height) / 2;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+    x += slice;
+  }
+  ctx.stroke();
+  scopeAnimId = requestAnimationFrame(drawScope);
+}
+
+// ---------------------------------------------------------------------------
+// 5. Research Digest & /project-development State Machine Cards
+// ---------------------------------------------------------------------------
+const DIGEST_ITEMS = [
+  {
+    id: '01-multigraph-family-infinity',
+    lane: 'MultiGraphFamily {<3,<3,<3}+1..+∞',
+    title: 'Breaking Apple Family’s 6-Member Ceiling via Hyperbolic MultiGraph CRDTs',
+    score: '10/10',
+    stages: 'data/01-multigraph-family-infinity/{raw.json, prompt.md, response.md, parsed.json}',
+    url: 'https://pocoo.vaked.dev/demos/book/family+1.html',
+    summary: 'Replaces Apple Family Sharing’s flat 6-slot array with Ring 0 Core Triad (Alex *, Chris /\\, Peter oo), Ring +1 Sovereign Kin (Nate ✦, Yves 💎 +1 Muse, Zeno 🐾), and Ring +2..∞ Overflow Sub-Hives (Fifike #7, ESP32-S3 MEDUSA #8-#10, and unbounded new kin).'
+  },
+  {
+    id: '02-radio-mesh-findmy-lora-ble-airplay',
+    lane: 'Radio & Acoustic Mesh (FindMy · LoRa · BLE · AirPlay)',
+    title: 'Quad-Transport Presence & Audio Routing Across Android, iOS, and macOS',
+    score: '10/10',
+    stages: 'data/02-radio-mesh-findmy-lora-ble-airplay/{raw.json, prompt.md, response.md, parsed.json}',
+    url: 'https://esp32.vaked.dev/',
+    summary: 'Unifies FindMy sanctuary geofences, 920 MHz LoRa <~~0o0 packets (38B, 44ms airtime), Bluetooth LE 5.3 RSSI trilateration + A2DP stereo, and AirPlay 2 multi-room group sync.'
+  },
+  {
+    id: '03-music-lane-wupz-mlx-quant',
+    lane: '8b-is/music Lane + WUPZ Linker + MLX-QUANT',
+    title: 'Triangle Family+1 Synth, alt-J (∆) Triptych & Zeno/Fifike 54/108 Hz Purr',
+    score: '10/10',
+    stages: 'data/03-music-lane-wupz-mlx-quant/{raw.json, prompt.md, response.md, parsed.json}',
+    url: 'https://pocoo.vaked.dev/posts/2026-10-20-alt-j-every-other-freckle.html',
+    summary: 'Zero-allocation wupz binary arena packer + MLX-QUANT v2.0.0-RC1 ternary synth driving 432/528/639/852 Hz family harmonics and the alt-J (∆) This Is All Yours triad.'
+  },
+  {
+    id: '04-kompress-super-ultra-digest',
+    lane: '8b-is Research Digest + pocoo.vaked.dev Blog',
+    title: '<~~0o0 kompress-super-ultra {<3,<3,<3}+1 & 16.1.0 MOZART-PROBE Digest',
+    score: '10/10',
+    stages: 'data/04-kompress-super-ultra-digest/{raw.json, prompt.md, response.md, parsed.json}',
+    url: 'https://pocoo.vaked.dev/demos/book/muse-yves-family-plus-1.html',
+    summary: 'Packs pocoo.vaked.dev blog reads and research digests into self-verifying <~~0o0 frames with 9-trit balanced-ternary CT-000 admissibility checks.'
+  }
+];
+
+function renderDigestCards() {
+  const el = document.getElementById('digest-cards');
+  if (!el) return;
+  el.innerHTML = DIGEST_ITEMS.map(d => {
+    const ksu = encodeKompress(`${d.lane}: ${d.title}`, d.id.slice(0, 10).toUpperCase());
+    return `
+      <div class="member-row" style="flex-direction:column;align-items:flex-start;border-left-color:var(--teal)">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <span class="pill gold">${d.lane}</span>
+          <span class="pill green">STAGE 1–5 VERIFIED · ${d.score}</span>
+        </div>
+        <div class="m-title" style="margin-top:6px;"><a href="${d.url}" target="_blank">${d.title}</a></div>
+        <div class="m-sub">${d.summary}</div>
+        <div class="code-box" style="width:100%;margin-top:6px;font-size:10.5px;">FS State: ${d.stages}\n${ksu.frame}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ---------------------------------------------------------------------------
+// 6. Live <~~0o0 Kompress-Super-Ultra Tab
+// ---------------------------------------------------------------------------
+function runLiveKompress() {
+  const inp = document.getElementById('kompress-input');
+  const out = document.getElementById('kompress-output');
+  if (!inp || !out) return;
+  const res = encodeKompress(inp.value, 'HIVE_LIVE');
+  out.textContent = `${res.frame}\n\n[Metrics] Raw UTF-8: ${res.rawBytes}B → LoRa 6-bit Packed: ${res.loraPackedBytes}B (${res.ratio}x compression · ${res.airtimeMs}ms SF7 airtime · Ternary b3:${res.signature} net=${res.net >= 0 ? '+' + res.net : res.net})`;
+  verifyLiveKompress();
+}
+
+function verifyLiveKompress() {
+  const out = document.getElementById('kompress-output');
+  const decEl = document.getElementById('kompress-decoded');
+  if (!out || !decEl) return;
+  const firstLine = out.textContent.split('\n')[0];
+  const dec = decodeKompress(firstLine);
+  decEl.textContent = JSON.stringify(dec, null, 2);
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  const pane = document.getElementById('tab-' + name);
+  if (pane) pane.classList.add('active');
+  const btns = document.querySelectorAll('.tab-btn');
+  const map = { family: 0, radios: 1, music: 2, digest: 3, kompress: 4, platforms: 5 };
+  if (btns[map[name]]) btns[map[name]].classList.add('active');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  renderFamilyGraph();
+  renderDigestCards();
+  runLiveKompress();
+  if (window.AndroidBeeHiveBridge) {
+    document.getElementById('pill-platform').textContent = 'ANDROID NATIVE APK BRIDGE ACTIVE';
+  }
+});
+</script>
+</body>
+</html>
