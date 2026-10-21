@@ -11,9 +11,11 @@ import {
   evaluateBerkshireMoatAndCompounding,
 } from '../pipeline/beehive-pipeline.mjs';
 
-test('MultiGraphFamily bypasses Apple Family 6-member limit with 10+ nodes', () => {
+test('MultiGraphFamily creates 10+ local fixture nodes without modifying Apple accounts', () => {
   const g = buildInitialMultiGraphFamily();
   assert.equal(g.appleFamilyMaxLimit, 6);
+  assert.equal(g.appleFamilyModified, false);
+  assert.equal(g.presenceVerified, false);
   assert.ok(g.activeCount >= 10);
   assert.ok(g.overflowCountBeyondAppleCap >= 4);
 });
@@ -51,9 +53,14 @@ test('5-stage pipeline emits a checked bundle in an isolated temporary root', as
   const { runPipeline: isolatedRun } = await import(pathToFileURL(modulePath).href);
   const bundle = isolatedRun({ force: true });
   assert.equal(bundle.digestItems.length, 4);
+  assert.equal(bundle.llmInvoked, false);
+  assert.equal(bundle.radioTransmissionAttempted, false);
   for (const item of bundle.digestItems) {
     assert.equal(item.kompressVerified, true);
-    assert.equal(item.score, 10);
+    assert.equal(item.score, null);
+    assert.equal(item.scoreStatus, 'not-evaluated');
+    assert.equal(item.platformParityVerified, false);
+    assert.equal(item.kompressVerificationScope, 'frame-integrity-only');
   }
   const cachedPath = path.join(root, 'repo', bundle.digestItems[0].stageFiles.parsed);
   const responsePath = path.join(root, 'repo', bundle.digestItems[0].stageFiles.response);
@@ -64,10 +71,18 @@ test('5-stage pipeline emits a checked bundle in an isolated temporary root', as
   assert.equal(reparsed.digestItems[0].kompressVerified, true);
   assert.equal(decodeKompressSuperUltra(reparsed.digestItems[0].kompressFrame).restored, multiline);
   const cached = JSON.parse(fs.readFileSync(cachedPath, 'utf8'));
+  cached.score = 10;
+  delete cached.reportedScore;
+  delete cached.scoreStatus;
+  cached.platformParityVerified = true;
   cached.kompressFrame = 'legacy or damaged';
   cached.kompressVerified = true;
   fs.writeFileSync(cachedPath, JSON.stringify(cached));
   const resumed = isolatedRun({ force: false });
   assert.equal(resumed.digestItems[0].kompressVerified, false);
+  assert.equal(resumed.digestItems[0].score, null);
+  assert.equal(resumed.digestItems[0].reportedScore, 10);
+  assert.equal(resumed.digestItems[0].platformParityVerified, false);
+  assert.equal(JSON.parse(fs.readFileSync(cachedPath, 'utf8')).score, 10, 'historical cache must be preserved');
   assert.match(resumed.digestItems[0].kompressVerificationError, /legacy/);
 });

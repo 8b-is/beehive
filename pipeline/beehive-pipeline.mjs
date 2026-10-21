@@ -337,6 +337,9 @@ export function buildInitialMultiGraphFamily() {
 
   return {
     schema: '8b-is/beehive-multigraph-family/v1',
+    dataKind: 'demo-fixture',
+    appleFamilyModified: false,
+    presenceVerified: false,
     appleFamilyMaxLimit: 6,
     beehiveMaxLimit: 'INFINITY (∞)',
     activeCount: members.length,
@@ -442,7 +445,7 @@ export function runPipeline({ force = false } = {}) {
     if (force || !fs.existsSync(rawPath)) {
       fs.writeFileSync(
         rawPath,
-        JSON.stringify({ acquiredAt: new Date().toISOString(), ...item }, null, 2)
+        JSON.stringify({ acquiredAt: new Date().toISOString(), ...item, provenance: 'fixture-with-optional-local-blog-metadata', metricsStatus: 'illustrative-not-measured' }, null, 2)
       );
     }
     const rawData = JSON.parse(fs.readFileSync(rawPath, 'utf8'));
@@ -474,7 +477,7 @@ export function runPipeline({ force = false } = {}) {
       fs.writeFileSync(promptPath, promptMd);
     }
 
-    // STAGE 3: PROCESS (produce structured response + <~~0o0 kompress-super-ultra frame)
+    // STAGE 3: PROCESS (deterministic fixture template; no model call or evaluation)
     if (force || !fs.existsSync(responsePath)) {
       const ksu = encodeKompressSuperUltra(
         `${rawData.lane} :: ${rawData.title} :: ${rawData.summary}`,
@@ -482,16 +485,16 @@ export function runPipeline({ force = false } = {}) {
       );
       const responseMd = [
         `## Summary`,
-        `${rawData.summary}`,
+        `Unverified fixture narrative: ${rawData.summary}`,
         ``,
         `## Score`,
-        `Rating: 10`,
+        `Rating: not evaluated`,
         ``,
         `## KompressFrame`,
         `${ksu.frame}`,
         ``,
         `## ActionablePoints`,
-        `- Platform parity verified across Android APK, iOS/macOS SwiftUI, and Web/PWA`,
+        `- Demo template only; no LLM synthesis, quality evaluation or platform parity verification`,
         `- Kompress ratio ${ksu.compressionRatio}x (${ksu.rawBytes}B -> ${ksu.frameBytes}B UTF-8 frame; no radio airtime measured)`,
         `- Balanced-ternary signature b3:${ksu.ternarySignature} (net ${ksu.ternaryNet >= 0 ? '+' + ksu.ternaryNet : ksu.ternaryNet})`,
       ].join('\n');
@@ -520,7 +523,9 @@ export function runPipeline({ force = false } = {}) {
         sourceRepo: rawData.sourceRepo,
         url: rawData.url,
         summary: summaryMatch ? summaryMatch[1].trim() : rawData.summary,
-        score: scoreMatch ? Number(scoreMatch[1]) : 10,
+        score: null,
+        reportedScore: scoreMatch ? Number(scoreMatch[1]) : null,
+        scoreStatus: 'not-evaluated',
         kompressFrame: frameStr,
         kompressVerified: decoded.valid,
         kompressStats: ksuStats,
@@ -544,6 +549,13 @@ export function runPipeline({ force = false } = {}) {
     const parsed = JSON.parse(fs.readFileSync(parsedPath, 'utf8'));
     // Cached flags are historical claims; validate the actual frame on every run.
     const verification = decodeKompressSuperUltra(parsed.kompressFrame);
+    // A cached score/summary is a claim, not an independently evaluated result.
+    parsed.reportedScore = parsed.reportedScore ?? parsed.score ?? null;
+    parsed.score = null;
+    parsed.scoreStatus = 'not-evaluated';
+    parsed.contentProvenance = 'fixture-or-unverified-cache';
+    parsed.platformParityVerified = false;
+    parsed.kompressVerificationScope = 'frame-integrity-only';
     parsed.kompressVerified = verification.valid;
     parsed.kompressVerificationError = verification.error ?? null;
     parsedItems.push(parsed);
@@ -556,11 +568,16 @@ export function runPipeline({ force = false } = {}) {
     architect: 'Peter-beerusSan ^^',
     signature: '<~~0o0 kompress-super-ultra {<3,<3,<3}+1',
     methodology: '/project-development (acquire -> prepare -> process -> parse -> render)',
+    executionMode: 'deterministic-fixture-template',
+    llmInvoked: false,
+    platformParityVerified: false,
+    radioTransmissionAttempted: false,
     platforms: ['android', 'ios', 'macos', 'web-pwa'],
     radios: ['FindMy', 'LoRa', 'Bluetooth', 'AirPlay'],
     familyGraph,
     digestItems: parsedItems,
     costEstimate: {
+      basis: 'illustrative fixture assumptions; not measured usage, current pricing or radio throughput',
       itemsPerDay: 48,
       tokensPerItem: 620,
       dailyTokens: 29760,
@@ -579,11 +596,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const bundle = runPipeline({ force: true });
   console.log(`[beehive-pipeline] 5-stage state machine complete -> data/beehive-state.json`);
   console.log(
-    `[beehive-pipeline] MultiGraphFamily nodes: ${bundle.familyGraph.activeCount} (${bundle.familyGraph.overflowCountBeyondAppleCap} beyond Apple Family's 6-member limit)`
+    `[beehive-pipeline] MultiGraphFamily nodes: ${bundle.familyGraph.activeCount} (${bundle.familyGraph.overflowCountBeyondAppleCap} local slots beyond six; Apple accounts unchanged)`
   );
   for (const item of bundle.digestItems) {
     console.log(
-      `  ✓ ${item.id} | score=${item.score}/10 | verified=${item.kompressVerified} | ratio=${item.kompressStats.compressionRatio}x`
+      `  ${item.id} | demo/unassessed | frameIntegrity=${item.kompressVerified} | ratio=${item.kompressStats.compressionRatio}x`
     );
   }
 }
