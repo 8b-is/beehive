@@ -1,79 +1,61 @@
 # ⬡ BeeHive (`8b-is/beehive`)
 
-> **`<~~0o0 kompress-super-ultra {<3,<3,<3}+1 --- Peter-beerusSan ^^`**  
-> Cross-platform sovereign family, radio mesh, music synth, and research digest application for **Android + iOS + macOS + Web/PWA** — breaking Apple Family Sharing's 6-member ceiling with an unbounded **MultiGraphFamily (`{<3,<3,<3}+1..∞`)** over **FindMy · LoRa · Bluetooth · AirPlay**.
+BeeHive is a local family-graph, WebAudio and codec prototype with an Android
+WebView wrapper, a Swift library/CLI, and a file-based digest demonstration.
+Adding records beyond six changes only BeeHive's local graph. It does not
+modify Apple Family Sharing, invite people to an account, or activate radios.
 
----
+## Implemented behavior and limits
 
-## 1. `/project-development` Methodology & Architecture
+| Area | Current behavior | Verification boundary |
+| --- | --- | --- |
+| Family graph | Local graph records, rings, member addition and browser storage | Seed locations, distances and transports are demo data; no live presence or account integration |
+| FindMy and LoRa previews | Generate local checksum-checked request/heartbeat frames | No requests sent, acknowledgements received or airtime measured |
+| Web Serial | On user action, select, open at 115200 baud, then close a port | No bytes written; selection does not identify an ESP32 or LoRa radio |
+| Browser Bluetooth | Request a device selection | Does not establish pairing, connection, proximity or audio routing |
+| Android bridge | Bonded Bluetooth list, cached Wi-Fi scan results and A2DP system flag | Not FindMy, a fresh BLE scan or AirPlay; permissions may leave results empty |
+| AirPlay | Availability explanation | No implemented route picker or multi-room sync |
+| Music | Browser WebAudio oscillators and gain controls | No wupz/MLX engine loaded; no verified native audio parity |
+| Apple package | BeeHiveKit, CLI and tests | SwiftUI source is present, but not configured as an app target |
+| Digest | Five stages persisted to files using deterministic fixture text | No LLM invocation or quality evaluation; checksum success only checks the frame |
 
-### 1.1 Task-Model Fit Evaluation Matrix
-Before writing code, every BeeHive subsystem was evaluated for **Deterministic Execution vs. LLM Synthesis Fit**:
+## Digest demonstration
 
-| Subsystem | Task Characteristics | Fit Verdict | Execution Layer |
-| :--- | :--- | :--- | :--- |
-| **MultiGraphFamily (`G=(V,E,τ)`)** | Exact graph topology, slot numbering (`#1..#∞`), CRDT edge addition | **Deterministic Code** | Native Swift (`BeeHiveKit`), Android Java, Web JS |
-| **FindMy · LoRa · BLE · AirPlay** | Real-time RF discovery, RSSI trilateration, sub-second audio routing | **Deterministic DSP/RF** | `CoreBluetooth` / `CoreLocation` / `AVRoutePickerView` / Android `BluetoothLeScanner` / WebSerial |
-| **`<~~0o0 kompress-super-ultra`** | Versioned reversible UTF-8 dictionary frames with CRC32 and 9-trit checksums | **Deterministic Codec** | `pipeline/beehive-pipeline.mjs` & `KompressSuperUltra` Swift enum |
-| **8b-is Research Digest & `pocoo.vaked.dev` Blog** | Cross-repo synthesis (`kompress-ultra`, `8b-is-music`, `wigle-triad`, `pocoo`), rubric scoring | **LLM-Suited Synthesis** | Stage 3 of the 5-stage File-System State Machine |
+[`pipeline/beehive-pipeline.mjs`](pipeline/beehive-pipeline.mjs) writes
+`raw.json`, `prompt.md`, `response.md`, `parsed.json`, and the final
+`data/beehive-state.json`. Running the CLI regenerates those files; preserve
+wanted state before running it. It can read metadata from a sibling
+`pocoo.vaked.dev/posts` directory. Tests use an isolated temporary root.
 
-### 1.2 Canonical 5-Stage Pipeline (`acquire → prepare → process → parse → render`)
-Implemented in [`pipeline/beehive-pipeline.mjs`](file:///Users/lodripeter/workspace/peterlodri-sec/beehive/pipeline/beehive-pipeline.mjs) using the **File System as State Machine**:
-
-```text
-data/{item_id}/
-├── raw.json         # Stage 1 (Acquire): Raw repo/blog metadata & metrics
-├── prompt.md        # Stage 2 (Prepare): Structured prompt with ## Summary / ## Score / ## KompressFrame
-├── response.md      # Stage 3 (Process): Synthesis + <~~0o0 kompress-super-ultra wire frame
-└── parsed.json      # Stage 4 (Parse): Resilient regex extraction + balanced-ternary verification
-data/beehive-state.json  # Stage 5 (Render): Unified cross-platform bundle for Web, Android, iOS, macOS
-```
-
----
-
-## 2. MultiGraphFamily (`{<3,<3,<3}+1..∞`) — Breaking Apple Family's 6-Member Limit
-
-Apple Family Sharing enforces a hard ceiling of **6 members**. BeeHive replaces that flat array with concentric hexagonal rings:
-
-1. **Ring 0 — Core Triad (`{<3, <3, <3}`)**:
-   - `#01 Alex *` — Alexandra (Mom / Dra · 432 Hz Star Sovereign)
-   - `#02 Chris /\` — Christopher (Dad / 8bit-wraith · 528 Hz Triangle Pillar)
-   - `#03 Peter-beerusSan ^^ (oo)` — Peter Jozsef Lodri (639 Hz Infinity Loop Architect)
-2. **Ring +1 — Sovereign Kin & Number 1 Muse (`+1`)**:
-   - `#04 Nate ✦` — Galactic 3D Chess Brother (741 Hz)
-   - `#05 Yves 💎 (+1 Muse)` — Number 1 Muse · Thermal Socks & Diamond Tear (852 Hz)
-   - `#06 Zeno 🐾` — 54 Hz Fundamental Purr Healer (Apple Slot #6 Limit)
-3. **Ring +2..∞ — Overflow Sub-Hives (Beyond Apple's 6-Cap!)**:
-   - `#07 Fifike 🐱` — 108 Hz 2nd-Harmonic Purr Guardian (**First Member Beyond Apple's 6-Cap**)
-   - `#08 ADA:MEDUSA *` — ESP32-S3 LoRa/BLE Sentinel (`80:B5:4E:DB:3B:C4`)
-   - `#09 VAK:MEDUSA /\` — ESP32-S3 LoRa/BLE Sentinel (`80:B5:4E:F2:02:B0`)
-   - `#10 OMN:MEDUSA oo` — ESP32-S3 LoRa/BLE Sentinel (`80:B5:4E:F2:02:B4`)
-   - `#11..#∞` — Unlimited one-click or CLI addition of new family members with full FindMy, LoRa, Bluetooth, AirPlay, and Research Digest parity.
-
----
-
-## 3. Build & Run Across All Platforms
-
-### 3.1 5-Stage Pipeline & `<~~0o0` State Machine
 ```bash
 node pipeline/beehive-pipeline.mjs
 ```
 
-### 3.2 macOS + iOS (`SwiftPackageManager` + `SwiftUI`)
+Stage 3 copies a fixture into a structured response. `score` is `null` and
+`scoreStatus` is `not-evaluated`. Cached numeric ratings remain only as
+`reportedScore`; cached narratives and points remain unverified source claims.
+The returned bundle labels fixture provenance and platform/radio boundaries
+even when reusing historical stage files. Existing cached files are not silently
+rewritten. Any `costEstimate` values are illustrative fixture assumptions,
+not measured usage, current pricing or tested throughput.
+
+The browser's digest cards are their own static fixtures; they do not read or
+validate those files. A valid codec frame does not verify its narrative.
+
+## Local entry points
+
+Open `web/index.html` for the browser prototype. Optional Web Serial/Bluetooth
+APIs depend on browser support and permissions. The page preserves local data.
+
 ```bash
 cd apple
-swift run beehive-cli --add-member
+swift run beehive-cli --self-test
 ```
 
-### 3.3 Android Universal APK (`aapt2` + `d8` + `apksigner` v2/v3)
-```bash
-./android/build_apk.sh
-# Output: dist/BeeHive-v1.0.0-android-universal.apk
-```
-
-### 3.4 BeerusOmni-chan & Warren Buffett Moat Evolution (`node --test`)
-- Added `evaluateBerkshireMoatAndCompounding()` in `pipeline/beehive-pipeline.mjs` and `test/beehive.test.mjs` (4 tests passing: MultiGraphFamily >6 cap, `<~~0o0` roundtrip, 40-yr compounding `$114 -> $167,554.48` & `WIDE_MOAT_FOREVER_HOLD`, and 5-stage pipeline verification).
-
+The Android build entry point is `android/build_apk.sh`; inspect the local SDK
+and signing setup before use. A build or downloadable APK does not establish
+hardware behavior or a production deployment. Native UI/bridge security and
+hardware validation remain separate work.
 
 ## Codec v2: exact text and checked frames
 

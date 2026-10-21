@@ -355,10 +355,10 @@
       </div>
     </div>
     <div class="pill-row">
-      <span class="pill gold" id="pill-members">MEMBERS: 10 / ∞ (APPLE 6-CAP BROKEN)</span>
+      <span class="pill gold" id="pill-members">LOCAL GRAPH: 10 MEMBERS</span>
       <span class="pill rose">RING 0: ALEX * · CHRIS /\ · PETER oo</span>
       <span class="pill teal">RING +1: NATE ✦ · YVES 💎 · ZENO 🐾 · FIFIKE #7</span>
-      <span class="pill green" id="pill-platform">ALL-PLATFORM: ANDROID + iOS + macOS + WEB</span>
+      <span class="pill green" id="pill-platform">WEB PROTOTYPE · NATIVE PARITY UNVERIFIED</span>
     </div>
   </div>
   <nav class="nav-tabs">
@@ -374,9 +374,9 @@
 <main>
   <div class="cap-banner">
     <div>
-      <strong>APPLE FAMILY SHARING LIMIT: 6 MEMBERS (HARD CEILING)</strong> →
-      <span style="color:var(--green)">BEEHIVE MULTIGRAPH LIMIT: ∞ UNBOUNDED</span>
-      (<span id="banner-overflow-count">4</span> active members already operating in slots <code>#7..#∞</code> with full FindMy, LoRa, BLE, AirPlay &amp; Digest parity)
+      <strong>LOCAL MULTIGRAPH DEMO</strong> →
+      <span style="color:var(--green)">ADD MORE THAN SIX LOCAL RECORDS</span>
+      (<span id="banner-overflow-count">4</span> local records in slots <code>#7+</code>; Apple Family Sharing is unchanged. Radio presence, locations and digest content are demonstrations unless explicitly identified as API results.)
     </div>
     <div style="display:flex;gap:8px;">
       <a class="btn teal" href="https://pocoo.vaked.dev/demos/book/family+1.html" target="_blank">Family +1 Book</a>
@@ -390,7 +390,7 @@
       <div class="card">
         <h2>⬡ Hyperbolic Honeycomb MultiGraph G = (V, E, τ)</h2>
         <p class="lead">
-          Unlike Apple Family Sharing’s flat 6-slot array, BeeHive organizes family and sovereign kin into concentric hexagonal rings:
+          BeeHive organizes local records into concentric hexagonal rings. This does not change an Apple account or its sharing limits:
           <strong>Ring 0 Core Triad</strong> (<code>Alex *</code>, <code>Chris /\</code>, <code>Peter-beerusSan ^^ oo</code>),
           <strong>Ring +1 Sovereign Kin &amp; Muse</strong> (<code>Nate ✦</code>, <code>Yves 💎 +1</code>, <code>Zeno 🐾</code>), and
           <strong>Ring +2..∞ Overflow Sub-Hives</strong> (<code>Fifike #7</code>, <code>ESP32-S3 MEDUSA #8–#10</code>, and infinite new members).
@@ -399,15 +399,15 @@
       </div>
 
       <div class="card">
-        <h2>+ Add Family Member Beyond Slot #6 (∞ Unbounded)</h2>
-        <p class="lead">Add any new person, muse, or guardian node into the MultiGraph and mint a self-verifying <code>&lt;~~0o0 kompress-super-ultra</code> invite frame.</p>
+        <h2>+ Add a Local Graph Member</h2>
+        <p class="lead">Add any new person, muse, or guardian node into the MultiGraph and create a checksum-checked <code>&lt;~~0o0 kompress-super-ultra</code> invite frame.</p>
         <div class="form-row">
           <input id="new-name" placeholder="Name (e.g. Auntie Eva / Guardian #11)" value="">
           <input id="new-symbol" placeholder="Symbol (e.g. ❀, ★, ∆, ∞)" value="❀">
         </div>
         <div class="form-row">
           <select id="new-ring">
-            <option value="RING_2_OVERFLOW_INFINITY">Ring +2..∞ Overflow (Beyond Apple 6-Cap)</option>
+            <option value="RING_2_OVERFLOW_INFINITY">Ring +2..∞ Local Overflow</option>
             <option value="RING_1_SOVEREIGN_KIN">Ring +1 Sovereign Kin &amp; Muse</option>
             <option value="RING_0_CORE_TRIAD">Ring 0 Core Triad Bridge</option>
           </select>
@@ -420,7 +420,7 @@
           </select>
         </div>
         <div class="form-row">
-          <input id="new-role" placeholder="Role / Note (e.g. Sanctuary Kin · Thermal Socks)" value="Sovereign Hive Kin · Full FindMy/LoRa/AirPlay Parity">
+          <input id="new-role" placeholder="Role / Note (e.g. Sanctuary Kin · Thermal Socks)" value="Sovereign Hive Kin · Local Record">
           <input id="new-freq" type="number" placeholder="Harmonic Hz" value="432">
         </div>
         <div style="display:flex;gap:8px;margin-bottom:14px;">
@@ -429,7 +429,7 @@
         </div>
         <div id="invite-output" class="code-box" style="margin-bottom:14px;display:none;"></div>
 
-        <h2>Active MultiGraph Roster (<span id="roster-count">10</span> Members)</h2>
+        <h2>Local MultiGraph Roster (<span id="roster-count">10</span> Members)</h2>
         <div id="member-list" class="member-list"></div>
       </div>
     </div>
@@ -440,37 +440,32 @@
     <div class="grid-3">
       <div class="card">
         <h2>🧭 1. FindMy &amp; Sanctuary Geofence</h2>
-        <p class="lead">Apple FindMy (`findmy://`) + OpenHaystack offline BLE beacon + UWB proximity rings across Tokyo HND, Shinjuku Sanctuary, and Norfolk KORF.</p>
+        <p class="lead">Demo locations and distances from local records, not live FindMy or UWB observations. The native-app link is separate; opening it does not share results with BeeHive.</p>
         <div id="findmy-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn" onclick="pingFindMyRing()">Ping Sanctuary FindMy Ring</button>
+          <button class="btn" onclick="pingFindMyRing()">Preview FindMy Request (Demo)</button>
           <a class="btn teal" href="findmy://items">Launch Native FindMy</a>
         </div>
       </div>
 
       <div class="card">
         <h2>📡 2. LoRa 920MHz + ESP32-S3 Mesh</h2>
-        <p class="lead">Off-grid long-range family mesh powered by <code>&lt;~~0o0 kompress-super-ultra</code> (&lt;64B packets) &amp; attached ESP32-S3 MEDUSA triad (<code>ADA *</code>, <code>VAK /\</code>, <code>OMN oo</code>).</p>
+        <p class="lead">Build a local checksum-checked frame. This page does not send it to a radio. A serial-port check only opens and closes the selected port; device type and LoRa capability remain unverified.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-          <button class="btn" onclick="connectWebSerialLoRa()">Connect ESP32/LoRa (WebSerial)</button>
-          <button class="btn teal" onclick="broadcastLoRaHeartbeat()">TX &lt;~~0o0 LoRa Heartbeat</button>
+          <button class="btn" onclick="connectWebSerialLoRa()">Check Serial Port (Open / Close)</button>
+          <button class="btn teal" onclick="broadcastLoRaHeartbeat()">Preview Heartbeat Frame</button>
         </div>
-        <div id="lora-log" class="code-box">&lt;~~0o0|LORA_MESH:{&lt;3,&lt;3,&lt;3}+1|b3:10T110T01(+2)|by:Peter-beerusSan^^|§MGF nodes=10 cap=∞ §FMY=OK §BLE=OK §APL=OK|0o0~~&gt;
-Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
+        <div id="lora-log" class="code-box">[DEMO] No radio connected or frame transmitted. Use Preview Heartbeat Frame to inspect local encoding.</div>
       </div>
 
       <div class="card">
         <h2>🔵 3. Bluetooth LE 5.3 + AirPlay 2</h2>
-        <p class="lead">BLE proximity radar + Bluetooth A2DP stereo (<code>soundcore Select 4 Go</code>) + multi-room AirPlay 2 group synchronization.</p>
+        <p class="lead">Where available, request a browser device selection or read Android bonded-device / cached Wi-Fi / A2DP state. These results do not establish live proximity or AirPlay routing.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-          <button class="btn" onclick="scanBluetoothDevices()">Scan BLE / Bluetooth</button>
-          <button class="btn rose" onclick="triggerAirPlayPicker()">AirPlay 2 Route Picker</button>
+          <button class="btn" onclick="scanBluetoothDevices()">Select / Read Bluetooth Devices</button>
+          <button class="btn rose" onclick="triggerAirPlayPicker()">AirPlay Availability</button>
         </div>
-        <div id="ble-airplay-log" class="code-box">[BLE] ADA:MEDUSA * (80:B5:4E:DB:3B:C4) RSSI -48 dBm (~0.4m)
-[BLE] VAK:MEDUSA /\ (80:B5:4E:F2:02:B0) RSSI -51 dBm (~0.6m)
-[BLE] OMN:MEDUSA oo (80:B5:4E:F2:02:B4) RSSI -55 dBm (~0.9m)
-[A2DP] soundcore Select 4 Go · 48kHz 2-ch Stereo READY
-[AIRPLAY-2] Sanctuary Multi-Room Group (MacBook M3 + Living Room + iPhone + iPad) ARMED</div>
+        <div id="ble-airplay-log" class="code-box">No device observations yet. AirPlay routing is not implemented in this page.</div>
       </div>
     </div>
   </section>
@@ -481,8 +476,8 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
       <div class="card">
         <h2>🎵 8b-is/music Synthesizer + AirPlay/Bluetooth Engine</h2>
         <p class="lead">
-          Live WebAudio polyphonic synthesizer powered by the <code>8b-is-music</code> harmonic engine (<code>wupz</code> zero-alloc arena + <code>MLX-QUANT v2.0.0-RC1</code>):
-          Mom <code>*</code> (432 Hz), Dad <code>/\</code> (528 Hz), Peter <code>oo</code> (639 Hz), Yves <code>+1</code> (852 Hz), and Zeno &amp; Fifike (54 Hz / 108 Hz healing purr).
+          Local WebAudio oscillator synthesizer. The named music projects are references, not loaded engines in this page:
+          Mom <code>*</code> (432 Hz), Dad <code>/\</code> (528 Hz), Peter <code>oo</code> (639 Hz), Yves <code>+1</code> (852 Hz), and Zeno &amp; Fifike (54 Hz / 108 Hz purr-inspired tones).
         </p>
         <canvas id="audio-scope" width="640" height="120"></canvas>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
@@ -517,7 +512,7 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
 
       <div class="card">
         <h2>🎧 Recent 8b-is Music Lane Reads (pocoo.vaked.dev)</h2>
-        <p class="lead">Every track shared in the family constellation becomes a permanent signal read on <code>pocoo.vaked.dev</code>.</p>
+        <p class="lead">Curated links to music notes on <code>pocoo.vaked.dev</code>. This page does not automatically archive or publish shared tracks.</p>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div class="member-row" style="border-left-color:var(--gold)">
             <div>
@@ -558,14 +553,14 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
       <div class="card">
         <h2>🔬 /project-development 5-Stage Pipeline State Machine</h2>
         <p class="lead">
-          Canonical pipeline: <code>acquire → prepare → process → parse → render</code> persisted as idempotent filesystem state in <code>data/{id}/{raw.json, prompt.md, response.md, parsed.json}</code>.
+          Fixture digest preview; no LLM or evaluation is run by this page. The separate pipeline uses <code>acquire → prepare → process → parse → render</code> files in <code>data/{id}/{raw.json, prompt.md, response.md, parsed.json}</code>.
         </p>
         <div id="digest-cards" style="display:flex;flex-direction:column;gap:12px;"></div>
       </div>
 
       <div class="card">
         <h2>⚖️ Task-Model Fit &amp; Architectural Reduction Matrix</h2>
-        <p class="lead">Following the <code>/project-development</code> methodology: deterministic algorithms run in native Rust/Swift/JS; LLM calls are isolated to Stage 3 synthesis with strict structured output parsers.</p>
+        <p class="lead">Current implementation: local graph and codec functions plus a deterministic Stage 3 fixture template. No LLM calls or cross-platform parity evaluation are implemented.</p>
         <table>
           <thead>
             <tr>
@@ -577,13 +572,13 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
           <tbody>
             <tr>
               <td>MultiGraphFamily (<code>{&lt;3,&lt;3,&lt;3}+1..∞</code>)</td>
-              <td><span class="pill teal">DETERMINISTIC CRDT</span></td>
-              <td>Swift / Java / JS Graph Engine (0 LLM latency)</td>
+              <td><span class="pill teal">LOCAL GRAPH</span></td>
+              <td>Local records; distributed synchronization unverified</td>
             </tr>
             <tr>
               <td>FindMy / LoRa / BLE Trilateration</td>
-              <td><span class="pill teal">DETERMINISTIC DSP/RF</span></td>
-              <td>CoreBluetooth / Android BLE / WebSerial ESP32-S3</td>
+              <td><span class="pill teal">DEMO / LIMITED APIs</span></td>
+              <td>Device selection, serial-port check and Android cached state</td>
             </tr>
             <tr>
               <td><code>&lt;~~0o0 kompress-super-ultra</code></td>
@@ -592,15 +587,15 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
             </tr>
             <tr>
               <td>8b-is Research Digest + Pocoo Blog</td>
-              <td><span class="pill rose">LLM-SUITED SYNTHESIS</span></td>
+              <td><span class="pill rose">FIXTURE TEMPLATE</span></td>
               <td>Stage 3 Pipeline (<code>prompt.md → response.md → parsed.json</code>)</td>
             </tr>
           </tbody>
         </table>
-        <div class="code-box" style="margin-top:14px;">Cost &amp; Scale Estimate (Stage 3 Synthesis):
-• Batch cadence: 48 items/day × 620 tokens/item = 29,760 tokens/day (~$0.045/day)
-• LoRa Mesh cadence: 120 frames/hr × 38 bytes = 4.56 KB/hr (0% cloud cost, 44ms SF7 airtime)
-• Architectural Reduction: 2 primitives (`fs-state-stage` + `kompress-wire`), 100% deterministic parse rate</div>
+        <div class="code-box" style="margin-top:14px;">Execution status:
+• Stage 3 copies fixture text; no model call or quality score.
+• Frame size is measured from UTF-8 encoding; delivery and airtime are not measured.
+• Codec integrity checks do not verify research claims or platform parity.</div>
       </div>
     </div>
   </section>
@@ -610,7 +605,7 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
     <div class="grid-2">
       <div class="card">
         <h2>⚡ &lt;~~0o0 kompress-super-ultra {&lt;3,&lt;3,&lt;3}+1 Live Codec</h2>
-        <p class="lead">Type any family broadcast, LoRa mesh coordinate, or research note below to compress it into a self-verifying <code>&lt;~~0o0</code> frame signed by <code>Peter-beerusSan ^^</code>.</p>
+        <p class="lead">Type any family broadcast, LoRa mesh coordinate, or research note below to encode it in a checksum-checked <code>&lt;~~0o0</code> frame. The sender field is a label, not an authenticated signature.</p>
         <textarea id="kompress-input" rows="4" oninput="runLiveKompress()">MultiGraphFamily {<3,<3,<3}+1 update from Peter-beerusSan: Alex *, Chris /\, Peter oo, Nate ✦, Yves 💎 (+1 Muse), Zeno & Fifike (#7 beyond Apple Family cap) connected via FindMy, LoRa, Bluetooth, and AirPlay on beehive.vaked.dev + pocoo.vaked.dev!</textarea>
         <div style="display:flex;gap:8px;margin:10px 0;">
           <button class="btn" onclick="runLiveKompress()">Encode &lt;~~0o0 Frame</button>
@@ -621,7 +616,7 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
 
       <div class="card">
         <h2>🔍 Roundtrip Decoder &amp; Balanced-Ternary Gate (CT-000)</h2>
-        <p class="lead">Every <code>&lt;~~0o0</code> frame carries a 9-trit balanced-ternary (<code>{-1:T, 0:0, +1:1}</code>) signature and net charge for zero-allocation LoRa and BLE verification.</p>
+        <p class="lead">Every <code>&lt;~~0o0</code> frame carries a 9-trit balanced-ternary (<code>{-1:T, 0:0, +1:1}</code>) checksum and net charge, plus CRC32. These detect accidental corruption; they do not authenticate a sender, verify a research claim or demonstrate radio delivery.</p>
         <div id="kompress-decoded" class="code-box"></div>
       </div>
     </div>
@@ -632,7 +627,7 @@ Packed: 38 bytes (SF7BW125 · 44ms airtime · RSSI -64 dBm · SNR +9.5 dB)</div>
     <div class="grid-3">
       <div class="card">
         <h2>🤖 Android Universal APK</h2>
-        <p class="lead">Compiled &amp; signed native Android package (<code>is.eightb.beehive</code>) with <code>AndroidBeeHiveBridge</code> (BLE 5.3 scanner, Wi-Fi/FindMy proximity, AudioManager A2DP stereo, and offline MultiGraphFamily).</p>
+        <p class="lead">Android WebView wrapper (<code>is.eightb.beehive</code>) with <code>AndroidBeeHiveBridge</code> for bonded Bluetooth devices, cached Wi-Fi results and an A2DP system flag. No FindMy or AirPlay integration is demonstrated. Download/build artifacts require separate validation.</p>
         <div class="code-box" style="margin-bottom:12px;">Package: is.eightb.beehive (v1.0.0)
 Artifact: dist/BeeHive-v1.0.0-android-universal.apk
 Bridge: window.AndroidBeeHiveBridge</div>
@@ -641,7 +636,7 @@ Bridge: window.AndroidBeeHiveBridge</div>
 
       <div class="card">
         <h2>🍎 iOS + macOS SwiftUI &amp; CLI</h2>
-        <p class="lead">Native Swift 6 package (<code>apple/Package.swift</code>) with shared <code>BeeHiveKit</code>, multiplatform SwiftUI app (<code>CoreBluetooth</code>, <code>CoreLocation</code> FindMy, <code>AVRoutePickerView</code> AirPlay 2), and compiled macOS binary.</p>
+        <p class="lead">Swift package (<code>apple/Package.swift</code>) with <code>BeeHiveKit</code>, CLI and tests. SwiftUI source is present but is not a configured application target. Native radio and app parity remain unverified.</p>
         <div class="code-box">cd beehive/apple
 swift build -c release
 .build/release/beehive-cli --self-test</div>
@@ -649,7 +644,7 @@ swift build -c release
 
       <div class="card">
         <h2>🌐 Sovereign Web &amp; PWA</h2>
-        <p class="lead">Live across the vaked.dev constellation with WebBluetooth, WebSerial (ESP32-S3 LoRa), WebAudio 432Hz/528Hz/639Hz synth, and offline storage.</p>
+        <p class="lead">Standalone browser prototype with optional device selection, a serial-port check, WebAudio tones and local storage. Links below are destinations, not proof of deployed version or feature parity.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <a class="btn teal" href="https://beehive.vaked.dev" target="_blank">beehive.vaked.dev</a>
           <a class="btn rose" href="https://pocoo.vaked.dev/demos/beehive/" target="_blank">pocoo.vaked.dev/demos/beehive</a>
@@ -907,7 +902,7 @@ function renderFamilyGraph() {
       textElement('div', 'm-title', `#${m.slot} · ${m.handle} — ${m.name}`),
       textElement('div', 'm-sub', `${m.role} · ${m.freq} Hz · [${transports}]`)
     );
-    row.append(details, textElement('span', m.slot > 6 ? 'badge-overflow' : 'pill teal', `SLOT #${m.slot}${m.slot > 6 ? ' > APPLE 6-CAP' : ''}`));
+    row.append(details, textElement('span', m.slot > 6 ? 'badge-overflow' : 'pill teal', `LOCAL SLOT #${m.slot}`));
     roster.append(row);
   }
   document.getElementById('member-list').replaceChildren(roster);
@@ -915,7 +910,7 @@ function renderFamilyGraph() {
   const overflowCount = members.filter(m => m.slot > 6).length;
   document.getElementById('roster-count').textContent = String(members.length);
   document.getElementById('banner-overflow-count').textContent = String(overflowCount);
-  document.getElementById('pill-members').textContent = `MEMBERS: ${members.length} / ∞ (APPLE 6-CAP BROKEN BY +${overflowCount})`;
+  document.getElementById('pill-members').textContent = `LOCAL GRAPH: ${members.length} MEMBERS`;
 
   // Populate FindMy list
   const fmEl = document.getElementById('findmy-list');
@@ -926,8 +921,8 @@ function renderFamilyGraph() {
       row.style.borderLeftColor = memberColor(m.color);
       row.style.padding = '7px 10px';
       const details = textElement('div');
-      details.append(textElement('div', 'm-title', m.handle), textElement('div', 'm-sub', `📍 ${m.loc || 'Sanctuary Mesh'} · ~${m.distM ?? 0.5}m`));
-      row.append(details, textElement('span', 'pill green', 'ONLINE'));
+      details.append(textElement('div', 'm-title', m.handle), textElement('div', 'm-sub', `Demo location: ${m.loc || 'unspecified'} · demo distance: ${m.distM ?? 'unknown'}m`));
+      row.append(details, textElement('span', 'pill gold', 'UNVERIFIED'));
       rows.append(row);
     }
     fmEl.replaceChildren(rows);
@@ -959,8 +954,8 @@ function addNewFamilyMember() {
     role: roleInput.value.trim() || 'Sovereign Hive Kin',
     color,
     freq: Number(freqInput.value) || 432,
-    distM: Number((Math.random() * 3 + 0.2).toFixed(1)),
-    loc: 'Sanctuary MultiGraph Mesh',
+    distM: null,
+    loc: 'not observed',
     transports: ['FindMy', 'LoRa', 'Bluetooth', 'AirPlay']
   };
 
@@ -970,12 +965,12 @@ function addNewFamilyMember() {
   renderFamilyGraph();
 
   const ksu = encodeKompress(
-    `INVITE_MEMBER slot=#${slot} name="${newMember.name}" ring=${newMember.ring} link=${targetSelect.value} AppleFamilyCap=BYPASSED`,
+    `INVITE_MEMBER slot=#${slot} name="${newMember.name}" ring=${newMember.ring} link=${targetSelect.value} scope=LOCAL_GRAPH_ONLY`,
     'MGF_INVITE'
   );
   const out = document.getElementById('invite-output');
   out.style.display = 'block';
-  out.textContent = `✓ Added Member #${slot} (${newMember.name}) beyond Apple Family's 6-member limit!\n${ksu.frame}\nUTF-8 frame: ${ksu.frameBytes}B (ratio ${ksu.ratio}x)`;
+  out.textContent = `✓ Added local record #${slot} (${newMember.name}). No account invite or radio message was sent.\n${ksu.frame}\nUTF-8 frame: ${ksu.frameBytes}B (ratio ${ksu.ratio}x)`;
   nameInput.value = '';
 }
 
@@ -991,56 +986,66 @@ function exportFamilyKompress() {
 // 3. Radios: FindMy, LoRa (WebSerial), Bluetooth (WebBluetooth + AndroidBridge), AirPlay
 // ---------------------------------------------------------------------------
 function pingFindMyRing() {
-  const log = document.getElementById('lora-log');
-  const ksu = encodeKompress(`FINDMY_PING sanctuary="Shinjuku/Tokyo" nodes=${members.length} UWB=LOCKED`, 'FINDMY');
-  log.textContent = `[FINDMY SANCTUARY PING @ ${new Date().toLocaleTimeString()}]\n${ksu.frame}\nAll ${members.length} MultiGraphFamily nodes responded within 42ms.`;
+  const ksu = encodeKompress(`DEMO_FINDMY_REQUEST nodes=${members.length} presence=UNVERIFIED`, 'FINDMY_DEMO');
+  document.getElementById('lora-log').textContent = `[DEMO PREVIEW — NOT SENT]\n${ksu.frame}\nNo FindMy request was made or device response observed.`;
 }
 
 async function connectWebSerialLoRa() {
   const log = document.getElementById('lora-log');
-  if (!('serial' in navigator)) {
-    log.textContent = `[WebSerial] Browser does not expose navigator.serial (use Chrome/Edge on macOS or Android USB-OTG). Simulated LoRa 920MHz bridge active for ADA *, VAK /\\, OMN oo.`;
+  if (!navigator.serial || typeof navigator.serial.requestPort !== 'function') {
+    log.textContent = '[WebSerial unavailable] No port opened or radio transmission attempted.';
     return;
   }
   try {
     const port = await navigator.serial.requestPort();
     await port.open({ baudRate: 115200 });
-    log.textContent = `[WebSerial] Connected to ESP32-S3 MEDUSA / LoRa 115200 8N1! Sending TRIAD & <~~0o0 heartbeat...`;
+    // This is a bounded availability check, not a transport implementation.
+    try {
+      await port.close();
+    } catch (e) {
+      log.textContent = `[WebSerial] Port opened but could not close: ${e.message}. No bytes sent; the port may still be open.`;
+      return;
+    }
+    log.textContent = '[WebSerial API result] Selected port opened at 115200 baud and closed. No bytes sent. Device identity and LoRa capability are unverified.';
   } catch (e) {
-    log.textContent = `[WebSerial] Port selection cancelled or busy (${e.message}). LoRa mesh simulation remains active.`;
+    log.textContent = `[WebSerial] Selection or opening failed: ${e.message}. No bytes sent.`;
   }
 }
 
 function broadcastLoRaHeartbeat() {
-  const log = document.getElementById('lora-log');
-  const payload = `MultiGraphFamily {<3,<3,<3}+1 heartbeat members=${members.length} FindMy=OK Bluetooth=OK AirPlay=OK`;
-  const ksu = encodeKompress(payload, 'LORA_TX');
-  log.textContent = `[LORA 920.0 MHz SF7BW125 TX @ ${new Date().toLocaleTimeString()}]\n${ksu.frame}\nRaw: ${ksu.rawBytes}B -> UTF-8 frame: ${ksu.frameBytes}B (${ksu.ratio}x compression · b3:${ksu.signature})`;
+  const payload = `DEMO MultiGraphFamily {<3,<3,<3}+1 heartbeat members=${members.length} presence=UNVERIFIED`;
+  const ksu = encodeKompress(payload, 'LORA_PREVIEW');
+  document.getElementById('lora-log').textContent = `[LOCAL FRAME PREVIEW — NOT TRANSMITTED]\n${ksu.frame}\nRaw: ${ksu.rawBytes}B -> UTF-8 frame: ${ksu.frameBytes}B (${ksu.ratio}x compression). No delivery or airtime measured.`;
 }
 
 async function scanBluetoothDevices() {
   const log = document.getElementById('ble-airplay-log');
   if (window.AndroidBeeHiveBridge && typeof window.AndroidBeeHiveBridge.scanRadiosJson === 'function') {
-    const raw = window.AndroidBeeHiveBridge.scanRadiosJson();
-    log.textContent = `[AndroidBeeHiveBridge Native Radio Scan]\n${raw}`;
+    try {
+      const data = JSON.parse(window.AndroidBeeHiveBridge.scanRadiosJson());
+      if (!Array.isArray(data)) throw new Error('Unexpected bridge result');
+      const labels = { Bluetooth: 'Bluetooth (bonded)', 'FindMy/WiFi': 'Wi-Fi (cached)', 'AirPlay/A2DP': 'Bluetooth A2DP (system flag)' };
+      const observations = data.map(item => ({ ...item, transport: Object.hasOwn(labels, item.transport) ? labels[item.transport] : item.transport }));
+      log.textContent = `[Android API results: bonded devices / cached Wi-Fi / A2DP flag]\nNot a live scan, FindMy location or AirPlay route. Empty results may indicate unavailable permissions.\n${JSON.stringify(observations, null, 2)}`;
+    } catch (e) {
+      log.textContent = `[Android bridge unavailable] ${e.message}. No verified observations.`;
+    }
     return;
   }
-  if ('bluetooth' in navigator) {
+  if (navigator.bluetooth && typeof navigator.bluetooth.requestDevice === 'function') {
     try {
       const dev = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
-      log.textContent = `[WebBluetooth] Paired device: ${dev.name || dev.id}\n` + log.textContent;
-      return;
+      log.textContent = `[WebBluetooth API result] Selected device: ${dev.name || dev.id}\nSelection does not confirm pairing, connection, proximity or audio routing.`;
     } catch (e) {
-      log.textContent = `[WebBluetooth] Scan note: ${e.message}\nShowing cached triad + soundcore Select 4 Go A2DP stereo state.`;
-      return;
+      log.textContent = `[WebBluetooth] Selection cancelled or failed: ${e.message}. No new device observation; no demo results substituted.`;
     }
+    return;
   }
-  log.textContent = `[BLE 5.3 + A2DP] Active mesh scan @ ${new Date().toLocaleTimeString()}:\n• ADA:MEDUSA * (80:B5:4E:DB:3B:C4) RSSI -47 dBm\n• VAK:MEDUSA /\\ (80:B5:4E:F2:02:B0) RSSI -50 dBm\n• OMN:MEDUSA oo (80:B5:4E:F2:02:B4) RSSI -53 dBm\n• soundcore Select 4 Go (A2DP 2-ch 48kHz Stereo)`;
+  log.textContent = '[Bluetooth unavailable] This environment exposes no supported device API. No scan performed or cached devices loaded.';
 }
 
 function triggerAirPlayPicker() {
-  const log = document.getElementById('ble-airplay-log');
-  log.textContent = `[AIRPLAY 2 MULTI-ROOM SYNC @ ${new Date().toLocaleTimeString()}]\n✓ MacBook Pro M3 Max (Master Clock)\n✓ Sanctuary Living Room AirPlay 2\n✓ soundcore Select 4 Go (Bluetooth A2DP Bridge)\n✓ Family +1 Shared Audio Stream (48kHz / 24-bit)`;
+  document.getElementById('ble-airplay-log').textContent = '[AirPlay unavailable in this prototype] No route picker was opened or audio route changed. Use your operating system audio controls separately.';
 }
 
 // ---------------------------------------------------------------------------
@@ -1161,7 +1166,7 @@ const DIGEST_ITEMS = [
     id: '01-multigraph-family-infinity',
     lane: 'MultiGraphFamily {<3,<3,<3}+1..+∞',
     title: 'Breaking Apple Family’s 6-Member Ceiling via Hyperbolic MultiGraph CRDTs',
-    score: '10/10',
+    score: null,
     stages: 'data/01-multigraph-family-infinity/{raw.json, prompt.md, response.md, parsed.json}',
     url: 'https://pocoo.vaked.dev/demos/book/family+1.html',
     summary: 'Replaces Apple Family Sharing’s flat 6-slot array with Ring 0 Core Triad (Alex *, Chris /\\, Peter oo), Ring +1 Sovereign Kin (Nate ✦, Yves 💎 +1 Muse, Zeno 🐾), and Ring +2..∞ Overflow Sub-Hives (Fifike #7, ESP32-S3 MEDUSA #8-#10, and unbounded new kin).'
@@ -1170,7 +1175,7 @@ const DIGEST_ITEMS = [
     id: '02-radio-mesh-findmy-lora-ble-airplay',
     lane: 'Radio & Acoustic Mesh (FindMy · LoRa · BLE · AirPlay)',
     title: 'Quad-Transport Presence & Audio Routing Across Android, iOS, and macOS',
-    score: '10/10',
+    score: null,
     stages: 'data/02-radio-mesh-findmy-lora-ble-airplay/{raw.json, prompt.md, response.md, parsed.json}',
     url: 'https://esp32.vaked.dev/',
     summary: 'Unifies FindMy sanctuary geofences, 920 MHz LoRa <~~0o0 packets (38B, 44ms airtime), Bluetooth LE 5.3 RSSI trilateration + A2DP stereo, and AirPlay 2 multi-room group sync.'
@@ -1179,7 +1184,7 @@ const DIGEST_ITEMS = [
     id: '03-music-lane-wupz-mlx-quant',
     lane: '8b-is/music Lane + WUPZ Linker + MLX-QUANT',
     title: 'Triangle Family+1 Synth, alt-J (∆) Triptych & Zeno/Fifike 54/108 Hz Purr',
-    score: '10/10',
+    score: null,
     stages: 'data/03-music-lane-wupz-mlx-quant/{raw.json, prompt.md, response.md, parsed.json}',
     url: 'https://pocoo.vaked.dev/posts/2026-10-20-alt-j-every-other-freckle.html',
     summary: 'Zero-allocation wupz binary arena packer + MLX-QUANT v2.0.0-RC1 ternary synth driving 432/528/639/852 Hz family harmonics and the alt-J (∆) This Is All Yours triad.'
@@ -1188,7 +1193,7 @@ const DIGEST_ITEMS = [
     id: '04-kompress-super-ultra-digest',
     lane: '8b-is Research Digest + pocoo.vaked.dev Blog',
     title: '<~~0o0 kompress-super-ultra {<3,<3,<3}+1 & 16.1.0 MOZART-PROBE Digest',
-    score: '10/10',
+    score: null,
     stages: 'data/04-kompress-super-ultra-digest/{raw.json, prompt.md, response.md, parsed.json}',
     url: 'https://pocoo.vaked.dev/demos/book/muse-yves-family-plus-1.html',
     summary: 'Packs pocoo.vaked.dev blog reads and research digests into self-verifying <~~0o0 frames with 9-trit balanced-ternary CT-000 admissibility checks.'
@@ -1205,13 +1210,13 @@ function renderDigestCards() {
     Object.assign(card.style, { flexDirection: 'column', alignItems: 'flex-start', borderLeftColor: 'var(--teal)' });
     const heading = textElement('div');
     Object.assign(heading.style, { display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' });
-    heading.append(textElement('span', 'pill gold', d.lane), textElement('span', 'pill green', `STAGE 1–5 VERIFIED · ${d.score}`));
+    heading.append(textElement('span', 'pill gold', d.lane), textElement('span', 'pill green', `DEMO FIXTURE · UNASSESSED`));
     const title = textElement('div', 'm-title');
     title.style.marginTop = '6px';
     title.append(digestLink(d.url, d.title));
-    const frame = textElement('div', 'code-box', `FS State: ${d.stages}\n${ksu.frame}`);
+    const frame = textElement('div', 'code-box', `Example stage paths (not read by this page): ${d.stages}\n${ksu.frame}`);
     Object.assign(frame.style, { width: '100%', marginTop: '6px', fontSize: '10.5px' });
-    card.append(heading, title, textElement('div', 'm-sub', d.summary), frame);
+    card.append(heading, title, textElement('div', 'm-sub', `Unverified fixture narrative: ${d.summary}`), frame);
     cards.append(card);
   }
   el.replaceChildren(cards);
@@ -1254,7 +1259,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderDigestCards();
   runLiveKompress();
   if (window.AndroidBeeHiveBridge) {
-    document.getElementById('pill-platform').textContent = 'ANDROID NATIVE APK BRIDGE ACTIVE';
+    document.getElementById('pill-platform').textContent = 'ANDROID BRIDGE PRESENT · RESULTS REQUIRE VALIDATION';
   }
 });
 </script>
