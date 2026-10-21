@@ -824,10 +824,38 @@ function saveState() {
   } catch (_) {}
 }
 
+// Build fixed elements; user and stored values are text, never HTML fragments.
+function textElement(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = String(text);
+  return el;
+}
+function memberColor(value) {
+  return typeof value === 'string' && /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(value) ? value : '#ffd700';
+}
+function svgElement(tag, attributes, text) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [name, value] of Object.entries(attributes)) el.setAttribute(name, String(value));
+  if (text !== undefined) el.textContent = String(text);
+  return el;
+}
+function digestLink(url, title) {
+  try {
+    const parsed = new URL(String(url));
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') throw new Error('Unsupported link');
+    const link = textElement('a', '', title);
+    link.href = parsed.href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    return link;
+  } catch (_) { return textElement('span', '', title); }
+}
+
 function renderFamilyGraph() {
   const svg = document.getElementById('hive-svg');
   const cx = 380, cy = 225;
-  const positions = {};
+  const positions = new Map();
 
   const ring0 = members.filter(m => m.ring === 'RING_0_CORE_TRIAD');
   const ring1 = members.filter(m => m.ring === 'RING_1_SOVEREIGN_KIN');
@@ -835,55 +863,54 @@ function renderFamilyGraph() {
 
   ring0.forEach((m, i) => {
     const ang = -Math.PI / 2 + (i * 2 * Math.PI) / Math.max(1, ring0.length);
-    positions[m.id] = { x: cx + 68 * Math.cos(ang), y: cy + 68 * Math.sin(ang) };
+    positions.set(m.id, { x: cx + 68 * Math.cos(ang), y: cy + 68 * Math.sin(ang) });
   });
   ring1.forEach((m, i) => {
     const ang = -Math.PI / 3 + (i * 2 * Math.PI) / Math.max(1, ring1.length);
-    positions[m.id] = { x: cx + 138 * Math.cos(ang), y: cy + 138 * Math.sin(ang) };
+    positions.set(m.id, { x: cx + 138 * Math.cos(ang), y: cy + 138 * Math.sin(ang) });
   });
   ring2.forEach((m, i) => {
     const ang = -Math.PI / 4 + (i * 2 * Math.PI) / Math.max(1, ring2.length);
-    positions[m.id] = { x: cx + 198 * Math.cos(ang), y: cy + 190 * Math.sin(ang) };
+    positions.set(m.id, { x: cx + 198 * Math.cos(ang), y: cy + 190 * Math.sin(ang) });
   });
 
-  let html = `
-    <circle cx="${cx}" cy="${cy}" r="68" fill="none" stroke="rgba(255,106,193,0.25)" stroke-dasharray="4 4"/>
-    <circle cx="${cx}" cy="${cy}" r="138" fill="none" stroke="rgba(255,215,0,0.22)" stroke-dasharray="5 5"/>
-    <circle cx="${cx}" cy="${cy}" r="196" fill="none" stroke="rgba(0,229,201,0.22)" stroke-dasharray="3 6"/>
-  `;
-
+  const graph = document.createDocumentFragment();
+  for (const [r, stroke, dash] of [[68, 'rgba(255,106,193,0.25)', '4 4'], [138, 'rgba(255,215,0,0.22)', '5 5'], [196, 'rgba(0,229,201,0.22)', '3 6']]) {
+    graph.append(svgElement('circle', { cx, cy, r, fill: 'none', stroke, 'stroke-dasharray': dash }));
+  }
   for (const e of edges) {
-    const p1 = positions[e.from];
-    const p2 = positions[e.to];
+    const p1 = positions.get(e.from), p2 = positions.get(e.to);
     if (!p1 || !p2) continue;
-    html += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="rgba(255,215,0,0.34)" stroke-width="1.6"/>`;
+    graph.append(svgElement('line', { x1: p1.x.toFixed(1), y1: p1.y.toFixed(1), x2: p2.x.toFixed(1), y2: p2.y.toFixed(1), stroke: 'rgba(255,215,0,0.34)', 'stroke-width': 1.6 }));
   }
-
   for (const m of members) {
-    const p = positions[m.id] || { x: cx, y: cy };
-    const isOverflow = m.slot > 6;
-    html += `
-      <g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">
-        <circle r="${isOverflow ? 20 : 23}" fill="#0d0a1a" stroke="${m.color || '#ffd700'}" stroke-width="${isOverflow ? 2.2 : 2.6}"/>
-        <text text-anchor="middle" dy="4" fill="${m.color || '#ffd700'}" font-family="SF Mono, monospace" font-size="11" font-weight="bold">${m.symbol}</text>
-        <text text-anchor="middle" dy="35" fill="#f3effb" font-family="SF Mono, monospace" font-size="9.5">#${m.slot} ${m.handle.split(' ')[0]}</text>
-      </g>
-    `;
+    const p = positions.get(m.id) || { x: cx, y: cy };
+    const isOverflow = m.slot > 6, color = memberColor(m.color);
+    const group = svgElement('g', { transform: `translate(${p.x.toFixed(1)},${p.y.toFixed(1)})` });
+    group.append(
+      svgElement('circle', { r: isOverflow ? 20 : 23, fill: '#0d0a1a', stroke: color, 'stroke-width': isOverflow ? 2.2 : 2.6 }),
+      svgElement('text', { 'text-anchor': 'middle', dy: 4, fill: color, 'font-family': 'SF Mono, monospace', 'font-size': 11, 'font-weight': 'bold' }, m.symbol ?? ''),
+      svgElement('text', { 'text-anchor': 'middle', dy: 35, fill: '#f3effb', 'font-family': 'SF Mono, monospace', 'font-size': 9.5 }, `#${m.slot} ${String(m.handle ?? '').split(' ')[0]}`)
+    );
+    graph.append(group);
   }
-
-  svg.innerHTML = html;
+  svg.replaceChildren(graph);
 
   // Roster list
-  const listEl = document.getElementById('member-list');
-  listEl.innerHTML = members.map(m => `
-    <div class="member-row" style="border-left-color:${m.color}">
-      <div>
-        <div class="m-title">#${m.slot} · ${m.handle} — ${m.name}</div>
-        <div class="m-sub">${m.role} · ${m.freq} Hz · [${(m.transports || []).join(', ')}]</div>
-      </div>
-      ${m.slot > 6 ? `<span class="badge-overflow">SLOT #${m.slot} &gt; APPLE 6-CAP</span>` : `<span class="pill teal">SLOT #${m.slot}</span>`}
-    </div>
-  `).join('');
+  const roster = document.createDocumentFragment();
+  for (const m of members) {
+    const row = textElement('div', 'member-row');
+    row.style.borderLeftColor = memberColor(m.color);
+    const details = textElement('div');
+    const transports = Array.isArray(m.transports) ? m.transports.join(', ') : '';
+    details.append(
+      textElement('div', 'm-title', `#${m.slot} · ${m.handle} — ${m.name}`),
+      textElement('div', 'm-sub', `${m.role} · ${m.freq} Hz · [${transports}]`)
+    );
+    row.append(details, textElement('span', m.slot > 6 ? 'badge-overflow' : 'pill teal', `SLOT #${m.slot}${m.slot > 6 ? ' > APPLE 6-CAP' : ''}`));
+    roster.append(row);
+  }
+  document.getElementById('member-list').replaceChildren(roster);
 
   const overflowCount = members.filter(m => m.slot > 6).length;
   document.getElementById('roster-count').textContent = String(members.length);
@@ -893,15 +920,17 @@ function renderFamilyGraph() {
   // Populate FindMy list
   const fmEl = document.getElementById('findmy-list');
   if (fmEl) {
-    fmEl.innerHTML = members.slice(0, 8).map(m => `
-      <div class="member-row" style="border-left-color:${m.color};padding:7px 10px;">
-        <div>
-          <div class="m-title">${m.handle}</div>
-          <div class="m-sub">📍 ${m.loc || 'Sanctuary Mesh'} · ~${m.distM ?? 0.5}m</div>
-        </div>
-        <span class="pill green">ONLINE</span>
-      </div>
-    `).join('');
+    const rows = document.createDocumentFragment();
+    for (const m of members.slice(0, 8)) {
+      const row = textElement('div', 'member-row');
+      row.style.borderLeftColor = memberColor(m.color);
+      row.style.padding = '7px 10px';
+      const details = textElement('div');
+      details.append(textElement('div', 'm-title', m.handle), textElement('div', 'm-sub', `📍 ${m.loc || 'Sanctuary Mesh'} · ~${m.distM ?? 0.5}m`));
+      row.append(details, textElement('span', 'pill green', 'ONLINE'));
+      rows.append(row);
+    }
+    fmEl.replaceChildren(rows);
   }
 }
 
@@ -1169,20 +1198,23 @@ const DIGEST_ITEMS = [
 function renderDigestCards() {
   const el = document.getElementById('digest-cards');
   if (!el) return;
-  el.innerHTML = DIGEST_ITEMS.map(d => {
+  const cards = document.createDocumentFragment();
+  for (const d of DIGEST_ITEMS) {
     const ksu = encodeKompress(`${d.lane}: ${d.title}`, d.id.slice(0, 10).toUpperCase());
-    return `
-      <div class="member-row" style="flex-direction:column;align-items:flex-start;border-left-color:var(--teal)">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-          <span class="pill gold">${d.lane}</span>
-          <span class="pill green">STAGE 1–5 VERIFIED · ${d.score}</span>
-        </div>
-        <div class="m-title" style="margin-top:6px;"><a href="${d.url}" target="_blank">${d.title}</a></div>
-        <div class="m-sub">${d.summary}</div>
-        <div class="code-box" style="width:100%;margin-top:6px;font-size:10.5px;">FS State: ${d.stages}\n${ksu.frame}</div>
-      </div>
-    `;
-  }).join('');
+    const card = textElement('div', 'member-row');
+    Object.assign(card.style, { flexDirection: 'column', alignItems: 'flex-start', borderLeftColor: 'var(--teal)' });
+    const heading = textElement('div');
+    Object.assign(heading.style, { display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' });
+    heading.append(textElement('span', 'pill gold', d.lane), textElement('span', 'pill green', `STAGE 1–5 VERIFIED · ${d.score}`));
+    const title = textElement('div', 'm-title');
+    title.style.marginTop = '6px';
+    title.append(digestLink(d.url, d.title));
+    const frame = textElement('div', 'code-box', `FS State: ${d.stages}\n${ksu.frame}`);
+    Object.assign(frame.style, { width: '100%', marginTop: '6px', fontSize: '10.5px' });
+    card.append(heading, title, textElement('div', 'm-sub', d.summary), frame);
+    cards.append(card);
+  }
+  el.replaceChildren(cards);
 }
 
 // ---------------------------------------------------------------------------
