@@ -14,7 +14,7 @@ Before writing code, every BeeHive subsystem was evaluated for **Deterministic E
 | :--- | :--- | :--- | :--- |
 | **MultiGraphFamily (`G=(V,E,τ)`)** | Exact graph topology, slot numbering (`#1..#∞`), CRDT edge addition | **Deterministic Code** | Native Swift (`BeeHiveKit`), Android Java, Web JS |
 | **FindMy · LoRa · BLE · AirPlay** | Real-time RF discovery, RSSI trilateration, sub-second audio routing | **Deterministic DSP/RF** | `CoreBluetooth` / `CoreLocation` / `AVRoutePickerView` / Android `BluetoothLeScanner` / WebSerial |
-| **`<~~0o0 kompress-super-ultra`** | Lossless dictionary + 6-bit LoRa packing + 9-trit balanced-ternary (`b3:T01`) hash | **Deterministic Codec** | `pipeline/beehive-pipeline.mjs` & `KompressSuperUltra` Swift enum |
+| **`<~~0o0 kompress-super-ultra`** | Versioned reversible UTF-8 dictionary frames with CRC32 and 9-trit checksums | **Deterministic Codec** | `pipeline/beehive-pipeline.mjs` & `KompressSuperUltra` Swift enum |
 | **8b-is Research Digest & `pocoo.vaked.dev` Blog** | Cross-repo synthesis (`kompress-ultra`, `8b-is-music`, `wigle-triad`, `pocoo`), rubric scoring | **LLM-Suited Synthesis** | Stage 3 of the 5-stage File-System State Machine |
 
 ### 1.2 Canonical 5-Stage Pipeline (`acquire → prepare → process → parse → render`)
@@ -74,3 +74,36 @@ swift run beehive-cli --add-member
 ### 3.4 BeerusOmni-chan & Warren Buffett Moat Evolution (`node --test`)
 - Added `evaluateBerkshireMoatAndCompounding()` in `pipeline/beehive-pipeline.mjs` and `test/beehive.test.mjs` (4 tests passing: MultiGraphFamily >6 cap, `<~~0o0` roundtrip, 40-yr compounding `$114 -> $167,554.48` & `WIDE_MOAT_FOREVER_HOLD`, and 5-stage pipeline verification).
 
+
+## Codec v2: exact text and checked frames
+
+Node, the standalone browser page (also bundled by Android), and BeeHiveKit now
+emit the same version 2 frames. Literal `§` is escaped as `§§` before dictionary
+substitution. Whitespace, Unicode scalar values, literal dictionary tokens and
+frame delimiters are preserved without normalization. JavaScript rejects
+unpaired surrogate code units instead of silently replacing them.
+
+The envelope is `<~~0o0|v2|TAG:{<3,<3,<3}+1|b3:SIGNATURE(NET)|by:SENDER|BODY|crc32:CHECK|0o0~~>`.
+Metadata uses percent-encoded UTF-8, retaining only RFC3986 unreserved bytes.
+CRC32/ISO-HDLC covers UTF-8 bytes from `v2|` through the end of BODY; the b3
+checksum is recomputed from the restored payload. Decoders reject a mismatch,
+unknown dictionary escape, noncanonical metadata or malformed envelope.
+These checks detect accidental corruption; they are **not encryption,
+authentication or a signature proving who sent a message**.
+
+Legacy frames are rejected as unverified. Earlier whitespace normalization and
+literal-token substitution could already have lost information; re-encode the
+original text using v2. Previously cached digest output remains historical and
+must be regenerated explicitly; opening this version does not rewrite user data.
+Older decoders are not compatible with v2, so upgrade communicating peers together.
+
+`frameBytes` is the actual UTF-8 envelope size and `compressionRatio` is raw bytes
+divided by frame bytes (it can be below 1). The former simulated
+`loraPackedBytes` and airtime fields have been removed; no 6-bit binary packer,
+radio delivery or measured airtime is implied by codec results. This protocol
+update does not establish native radio or app feature parity.
+
+Run `node --test` for isolated Node/browser-codec regressions and `cd apple &&
+swift test -j 2` for Swift parity against the same `test/codec-vectors.json`.
+The pipeline integration test uses a temporary directory, not checked-in state
+or a sibling blog checkout. No Android signing or hardware is used by these tests.

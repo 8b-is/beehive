@@ -20,6 +20,7 @@ let package = Package(
             name: "BeeHiveCLI",
             dependencies: ["BeeHiveKit"],
             path: "Sources/BeeHiveCLI"
-        )
+        ),
+        .testTarget(name: "BeeHiveKitTests", dependencies: ["BeeHiveKit"])
     ]
 )

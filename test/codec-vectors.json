@@ -1,0 +1,56 @@
+[
+  {
+    "raw": "",
+    "tag": "日:本|\n",
+    "sender": "a|b^^ 🐝",
+    "frame": "<~~0o0|v2|%E6%97%A5%3A%E6%9C%AC%7C%0A:{<3,<3,<3}+1|b3:000000000(+0)|by:a%7Cb%5E%5E%20%F0%9F%90%9D||crc32:17d29553|0o0~~>"
+  },
+  {
+    "raw": "simple ASCII",
+    "tag": "TEST",
+    "sender": "sender",
+    "frame": "<~~0o0|v2|TEST:{<3,<3,<3}+1|b3:1110T0000(+2)|by:sender|simple ASCII|crc32:826b8abf|0o0~~>"
+  },
+  {
+    "raw": "  alpha  beta\n\tgamma  ",
+    "tag": "日:本|\n",
+    "sender": "a|b^^ 🐝",
+    "frame": "<~~0o0|v2|%E6%97%A5%3A%E6%9C%AC%7C%0A:{<3,<3,<3}+1|b3:0T011011T(+2)|by:a%7Cb%5E%5E%20%F0%9F%90%9D|  alpha  beta\n\tgamma  |crc32:780d93bf|0o0~~>"
+  },
+  {
+    "raw": "literal §MGF §§ §TRI+1 §UNKNOWN",
+    "tag": "TEST",
+    "sender": "sender",
+    "frame": "<~~0o0|v2|TEST:{<3,<3,<3}+1|b3:TT0TT01T0(-4)|by:sender|literal §§MGF §§§§ §§TRI+1 §§UNKNOWN|crc32:d019a222|0o0~~>"
+  },
+  {
+    "raw": "MultiGraphFamily kompress-super-ultra Peter-beerusSan pocoo.vaked.dev esp32.vaked.dev beehive.vaked.dev 8b-is-music kompress-ultra wigle-triad Apple Family Bluetooth AirPlay FindMy LoRa {<3,<3,<3}+1 balanced-ternary sanctuary entanglement frequency coherence",
+    "tag": "日:本|\n",
+    "sender": "a|b^^ 🐝",
+    "frame": "<~~0o0|v2|%E6%97%A5%3A%E6%9C%AC%7C%0A:{<3,<3,<3}+1|b3:00T1T0T10(-1)|by:a%7Cb%5E%5E%20%F0%9F%90%9D|§MGF §KSU §PBS §PCO §E32 §BHV §8BM §8KU §WGT §APF §BLE §APL §FMY §LRA §TRI+1 §B3 §SNC §ENT §FRQ §COH|crc32:b897da1d|0o0~~>"
+  },
+  {
+    "raw": "日本語 🐝",
+    "tag": "TEST",
+    "sender": "sender",
+    "frame": "<~~0o0|v2|TEST:{<3,<3,<3}+1|b3:000T11110(+3)|by:sender|日本語 🐝|crc32:a7d25b5b|0o0~~>"
+  },
+  {
+    "raw": "é é §́",
+    "tag": "日:本|\n",
+    "sender": "a|b^^ 🐝",
+    "frame": "<~~0o0|v2|%E6%97%A5%3A%E6%9C%AC%7C%0A:{<3,<3,<3}+1|b3:0TT10TTT1(-3)|by:a%7Cb%5E%5E%20%F0%9F%90%9D|é é §§́|crc32:2602d7f2|0o0~~>"
+  },
+  {
+    "raw": "﻿\u0000\r\n",
+    "tag": "TEST",
+    "sender": "sender",
+    "frame": "<~~0o0|v2|TEST:{<3,<3,<3}+1|b3:000T11000(+1)|by:sender|﻿\u0000\r\n|crc32:194a67a7|0o0~~>"
+  },
+  {
+    "raw": "|0o0~~>\n<~~0o0|v2|x|crc32:00000000",
+    "tag": "日:本|\n",
+    "sender": "a|b^^ 🐝",
+    "frame": "<~~0o0|v2|%E6%97%A5%3A%E6%9C%AC%7C%0A:{<3,<3,<3}+1|b3:0T1TTT01T(-3)|by:a%7Cb%5E%5E%20%F0%9F%90%9D||0o0~~>\n<~~0o0|v2|x|crc32:00000000|crc32:e48246df|0o0~~>"
+  }
+]

@@ -137,29 +137,86 @@ public enum KompressSuperUltra {
         ("kompress-super-ultra", "§KSU"),
         ("Peter-beerusSan", "§PBS"),
         ("pocoo.vaked.dev", "§PCO"),
+        ("esp32.vaked.dev", "§E32"),
         ("beehive.vaked.dev", "§BHV"),
+        ("8b-is-music", "§8BM"),
+        ("kompress-ultra", "§8KU"),
+        ("wigle-triad", "§WGT"),
+        ("Apple Family", "§APF"),
         ("Bluetooth", "§BLE"),
         ("AirPlay", "§APL"),
         ("FindMy", "§FMY"),
         ("LoRa", "§LRA"),
-        ("{<3,<3,<3}+1", "§TRI+1")
+        ("{<3,<3,<3}+1", "§TRI+1"),
+        ("balanced-ternary", "§B3"),
+        ("sanctuary", "§SNC"),
+        ("entanglement", "§ENT"),
+        ("frequency", "§FRQ"),
+        ("coherence", "§COH")
     ]
-
-    public static func encode(_ raw: String, tag: String = "HIVE", sender: String = "Peter-beerusSan^^") -> String {
-        var body = raw
-        for (word, tok) in dict {
-            body = body.replacingOccurrences(of: word, with: tok)
-        }
+    public struct Decoded: Equatable, Sendable {
+        public let tag: String
+        public let sender: String
+        public let restored: String
+        // Checksums detect corruption, not sender identity.
+        public let authenticated = false
+    }
+    private static func hash(_ raw: String) -> (String, Int) {
         var trits = [Int](repeating: 0, count: 9)
-        for (i, byte) in Array(raw.utf8).enumerated() {
-            let b = Int(byte)
-            let delta = (b % 3) - 1
-            let idx = (i + b) % 9
-            trits[idx] = ((trits[idx] + delta + 4) % 3) - 1
+        for (i, byte) in raw.utf8.enumerated() {
+            let b = Int(byte), idx = (i + Int(byte)) % 9
+            trits[idx] = ((trits[idx] + (b % 3) - 1 + 4) % 3) - 1
         }
-        let sig = trits.map { $0 < 0 ? "T" : ($0 > 0 ? "1" : "0") }.joined()
-        let net = trits.reduce(0, +)
-        let netStr = net >= 0 ? "+\(net)" : "\(net)"
-        return "<~~0o0|\(tag):{<3,<3,<3}+1|b3:\(sig)(\(netStr))|by:\(sender)|\(body)|0o0~~>"
+        return (trits.map { $0 < 0 ? "T" : ($0 > 0 ? "1" : "0") }.joined(), trits.reduce(0, +))
+    }
+    private static func crc32(_ text: String) -> String {
+        var crc: UInt32 = 0xffffffff
+        for byte in text.utf8 {
+            crc ^= UInt32(byte)
+            for _ in 0..<8 { crc = (crc >> 1) ^ (crc & 1 == 1 ? 0xedb88320 : 0) }
+        }
+        return String(format: "%08x", crc ^ 0xffffffff)
+    }
+    private static func header(_ text: String) -> String {
+        text.utf8.map { b in
+            if (65...90).contains(b) || (97...122).contains(b) || (48...57).contains(b) || [45, 46, 95, 126].contains(b) {
+                return String(UnicodeScalar(b))
+            }
+            return String(format: "%%%02X", b)
+        }.joined()
+    }
+    public static func encode(_ raw: String, tag: String = "HIVE", sender: String = "Peter-beerusSan^^") -> String {
+        var body = raw.replacingOccurrences(of: "§", with: "§§", options: .literal)
+        for (word, token) in dict { body = body.replacingOccurrences(of: word, with: token, options: .literal) }
+        let (signature, net) = hash(raw)
+        let content = "v2|\(header(tag)):{<3,<3,<3}+1|b3:\(signature)(\(net >= 0 ? "+" : "")\(net))|by:\(header(sender))|\(body)"
+        return "<~~0o0|\(content)|crc32:\(crc32(content))|0o0~~>"
+    }
+    /// Only verified v2 frames are returned. Legacy frames may already have lost text.
+    public static func decode(_ frame: String) -> Decoded? {
+        let pattern = #"^<~~0o0\|(v2\|([^|:]*):\{<3,<3,<3\}\+1\|b3:([T01]{9})\(([+-]?\d+)\)\|by:([^|]*)\|([\s\S]*))\|crc32:([0-9a-f]{8})\|0o0~~>$"#
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: frame, range: NSRange(frame.startIndex..., in: frame)),
+              match.range.length == (frame as NSString).length else { return nil }
+        let ns = frame as NSString
+        let values = (1...7).map { ns.substring(with: match.range(at: $0)) }
+        guard crc32(values[0]) == values[6],
+              let tag = values[1].removingPercentEncoding,
+              let sender = values[4].removingPercentEncoding,
+              header(tag) == values[1], header(sender) == values[4] else { return nil }
+        let body = Array(values[5].utf8), marker: [UInt8] = [194, 167]
+        var output: [UInt8] = [], i = 0
+        while i < body.count {
+            if !body[i...].starts(with: marker) { output.append(body[i]); i += 1; continue }
+            if body[i...].starts(with: marker + marker) { output += marker; i += 4; continue }
+            guard let entry = dict.first(where: { body[i...].starts(with: $0.1.utf8) }) else { return nil }
+            output += entry.0.utf8; i += entry.1.utf8.count
+        }
+        // Input is valid Swift UTF-8 and substitutions preserve scalar boundaries.
+        // Foundation's encoding initializer can consume a leading BOM.
+        let restored = String(decoding: output, as: UTF8.self)
+        let (signature, net) = hash(restored)
+        guard signature == values[2], "\(net >= 0 ? "+" : "")\(net)" == values[3] else { return nil }
+        return Decoded(tag: tag, sender: sender, restored: restored)
     }
 }
