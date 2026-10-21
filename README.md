@@ -49,8 +49,13 @@ APIs depend on browser support and permissions. The page preserves local data.
 
 ```bash
 cd apple
-swift run beehive-cli --self-test
+swift run beehive-cli --add-member
 ```
+
+The CLI command above adds one in-memory demo member and prints a codec frame;
+it does not run tests. Run `swift test -j 2` in `apple/` for the test suite.
+The SwiftUI view is source-only: there is no configured application target,
+account integration or native radio implementation.
 
 The Android build entry point is `android/build_apk.sh`; inspect the local SDK
 and signing setup before use. A build or downloadable APK does not establish
