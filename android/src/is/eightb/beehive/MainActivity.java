@@ -5,6 +5,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ActivityNotFoundException;
+import android.net.Uri;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.wifi.ScanResult;
@@ -18,7 +21,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
@@ -39,35 +48,77 @@ public class MainActivity extends Activity {
             w.setNavigationBarColor(Color.parseColor("#07060D"));
         }
 
-        WebView.setWebContentsDebuggingEnabled(true);
+        WebView.setWebContentsDebuggingEnabled(false);
         webView = new WebView(this);
         webView.setBackgroundColor(Color.parseColor("#07060D"));
 
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
-        s.setAllowFileAccess(true);
+        s.setAllowFileAccess(false);
+        s.setAllowContentAccess(false);
+        s.setAllowFileAccessFromFileURLs(false);
+        s.setAllowUniversalAccessFromFileURLs(false);
+        s.setBlockNetworkLoads(true);
+        s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         s.setMediaPlaybackRequiresUserGesture(false);
 
         webView.setWebChromeClient(new WebChromeClient());
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new LocalOnlyClient());
         webView.addJavascriptInterface(new AndroidBeeHiveBridge(this), "AndroidBeeHiveBridge");
 
         setContentView(webView);
-        try {
-            InputStream is = getAssets().open("index.html");
-            byte[] buf = new byte[is.available()];
-            int read = 0;
-            while (read < buf.length) {
-                int r = is.read(buf, read, buf.length - read);
-                if (r <= 0) break;
-                read += r;
+        // Preserve the existing storage origin, but never fetch this origin remotely.
+        webView.loadUrl(WebViewPolicy.LOCAL_PAGE);
+    }
+
+    private WebResourceResponse blockedResponse(String message) {
+        return new WebResourceResponse("text/plain", "UTF-8", 403, "Blocked",
+                java.util.Collections.singletonMap("Cache-Control", "no-store"),
+                new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    private final class LocalOnlyClient extends WebViewClient {
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            if (!WebViewPolicy.canServeAsset(request.getUrl().toString(),
+                    request.getMethod(), request.isForMainFrame())) {
+                return blockedResponse("Only the packaged BeeHive page is available here.");
             }
-            is.close();
-            String html = new String(buf, 0, read, StandardCharsets.UTF_8);
-            webView.loadDataWithBaseURL("https://beehive.vaked.dev/", html, "text/html", "UTF-8", "https://beehive.vaked.dev/");
-        } catch (Throwable e) {
-            webView.loadUrl("file:///android_asset/index.html");
+            try {
+                InputStream asset = getAssets().open("index.html");
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Security-Policy", "default-src 'none'; script-src 'unsafe-inline'; "
+                        + "style-src 'unsafe-inline'; img-src data:; media-src blob:; "
+                        + "connect-src 'none'; frame-src 'none'; object-src 'none'; "
+                        + "base-uri 'none'; form-action 'none'; frame-ancestors 'none'");
+                headers.put("Cache-Control", "no-store");
+                headers.put("X-Content-Type-Options", "nosniff");
+                return new WebResourceResponse("text/html", "UTF-8", 200, "OK", headers, asset);
+            } catch (IOException e) {
+                return blockedResponse("Packaged BeeHive page unavailable. No remote fallback was loaded.");
+            }
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            String url = request.getUrl().toString();
+            if (WebViewPolicy.canOpenExternally(url, request.isForMainFrame(), request.hasGesture())) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException | SecurityException ignored) {
+                    // Missing handlers do not justify loading external content with the bridge.
+                }
+            }
+            return true; // Every navigation stays out of the bridge-enabled WebView.
+        }
+
+        @Override
+        @SuppressWarnings("deprecation")
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return true; // No main-frame/user-gesture evidence in this legacy callback.
         }
     }
 

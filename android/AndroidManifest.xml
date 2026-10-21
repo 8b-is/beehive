@@ -20,7 +20,7 @@
 
     <application
         android:label="BeeHive · 8b-is"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         android:hardwareAccelerated="true">
         <activity
             android:name="is.eightb.beehive.MainActivity"

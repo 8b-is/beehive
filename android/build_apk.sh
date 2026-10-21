@@ -27,7 +27,8 @@ echo "[android] Compiling MainActivity.java -> classes.dex..."
 javac -source 11 -target 11 \
   -cp "$PLATFORM" \
   -d "$BUILD/obj" \
-  "$HERE/src/is/eightb/beehive/MainActivity.java"
+  "$HERE/src/is/eightb/beehive/MainActivity.java" \
+  "$HERE/src/is/eightb/beehive/WebViewPolicy.java"
 
 "$BT/d8" --lib "$PLATFORM" --output "$BUILD/dex" $(find "$BUILD/obj" -name "*.class")
 
