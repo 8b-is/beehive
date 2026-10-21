@@ -44,70 +44,81 @@ const GLYPH_DICT = [
   ['coherence', '§COH'],
 ];
 
+// Version 2 escapes literal token prefixes and checks the UTF-8 wire content.
+// CRC32 and b3 detect accidental corruption; neither authenticates a sender.
+function utf8(text) {
+  const bytes = new TextEncoder().encode(text);
+  if (new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes) !== text) throw new TypeError('Text must contain valid Unicode');
+  return bytes;
+}
 export function ternaryHash9(input) {
-  const bytes = Buffer.from(String(input), 'utf8');
+  const bytes = utf8(String(input));
   const trits = new Array(9).fill(0);
   for (let i = 0; i < bytes.length; i++) {
     const b = bytes[i];
-    const delta = (b % 3) - 1; // {-1, 0, +1}
     const idx = (i + b) % 9;
-    trits[idx] = ((trits[idx] + delta + 4) % 3) - 1;
+    trits[idx] = ((trits[idx] + (b % 3) - 1 + 4) % 3) - 1;
   }
-  const str = trits.map((t) => (t < 0 ? 'T' : t > 0 ? '1' : '0')).join('');
-  const net = trits.reduce((a, b) => a + b, 0);
-  return { trits, signature: str, net };
+  return { trits, signature: trits.map(t => t < 0 ? 'T' : t > 0 ? '1' : '0').join(''), net: trits.reduce((a, b) => a + b, 0) };
 }
-
+function crc32(text) {
+  let crc = 0xffffffff;
+  for (const byte of utf8(text)) {
+    crc ^= byte;
+    for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+  }
+  return ((crc ^ 0xffffffff) >>> 0).toString(16).padStart(8, '0');
+}
+function headerText(text) {
+  // The same RFC3986 unreserved byte set is used by Swift.
+  return Array.from(utf8(String(text)), byte =>
+    /[A-Za-z0-9_.~-]/.test(String.fromCharCode(byte)) ? String.fromCharCode(byte) : '%' + byte.toString(16).toUpperCase().padStart(2, '0')
+  ).join('');
+}
+function expandBody(body) {
+  let restored = '';
+  for (let i = 0; i < body.length;) {
+    if (body[i] !== '§') { restored += body[i++]; continue; }
+    if (body[i + 1] === '§') { restored += '§'; i += 2; continue; }
+    const entry = GLYPH_DICT.find(([, token]) => body.startsWith(token, i));
+    if (!entry) throw new Error('Unknown dictionary escape');
+    restored += entry[0]; i += entry[1].length;
+  }
+  return restored;
+}
 export function encodeKompressSuperUltra(payloadObjOrStr, meta = {}) {
-  const rawStr =
-    typeof payloadObjOrStr === 'string'
-      ? payloadObjOrStr
-      : JSON.stringify(payloadObjOrStr);
-  let body = rawStr.replace(/\s+/g, ' ').trim();
-  for (const [word, token] of GLYPH_DICT) {
-    body = body.split(word).join(token);
-  }
-  const { signature, net } = ternaryHash9(rawStr);
-  const tag = meta.tag || 'HIVE';
-  const sender = meta.sender || 'Peter-beerusSan^^';
-  const frame = `<~~0o0|${tag}:{<3,<3,<3}+1|b3:${signature}(${net >= 0 ? '+' + net : net})|by:${sender}|${body}|0o0~~>`;
-  const rawBytes = Buffer.byteLength(rawStr, 'utf8');
-  const compactBytes = Buffer.byteLength(body, 'utf8');
-  // Simulated binary-packed LoRa payload size (6-bit glyph packing + 9-trit header)
-  const loraPackedBytes = Math.max(18, Math.ceil(compactBytes * 0.42));
-  const loraAirtimeMs = Math.round(loraPackedBytes * 1.15); // SF7BW125 approx
-  return {
-    frame,
-    rawBytes,
-    compactBytes,
-    loraPackedBytes,
-    compressionRatio: Number((rawBytes / Math.max(1, loraPackedBytes)).toFixed(2)),
-    loraAirtimeMs,
-    ternarySignature: signature,
-    ternaryNet: net,
-  };
+  const raw = typeof payloadObjOrStr === 'string' ? payloadObjOrStr : JSON.stringify(payloadObjOrStr);
+  if (typeof raw !== 'string') throw new TypeError('Payload must be text or JSON serializable');
+  const rawBytes = utf8(raw).length;
+  let body = raw.replaceAll('§', '§§');
+  for (const [word, token] of GLYPH_DICT) body = body.split(word).join(token);
+  const { signature, net } = ternaryHash9(raw);
+  const tag = headerText(meta.tag ?? 'HIVE');
+  const sender = headerText(meta.sender ?? 'Peter-beerusSan^^');
+  const content = `v2|${tag}:{<3,<3,<3}+1|b3:${signature}(${net >= 0 ? '+' : ''}${net})|by:${sender}|${body}`;
+  const frame = `<~~0o0|${content}|crc32:${crc32(content)}|0o0~~>`;
+  const frameBytes = utf8(frame).length;
+  return { frame, version: 2, rawBytes, compactBytes: utf8(body).length, frameBytes,
+    compressionRatio: Number((rawBytes / frameBytes).toFixed(2)),
+    ternarySignature: signature, ternaryNet: net };
 }
-
 export function decodeKompressSuperUltra(frame) {
-  const m = String(frame).match(
-    /^<~~0o0\|([^:]+):\{<3,<3,<3\}\+1\|b3:([T01]{9})\(([+-]?\d+)\)\|by:([^|]+)\|([\s\S]*)\|0o0~~>$/
-  );
-  if (!m) {
-    return { valid: false, error: 'Invalid <~~0o0 frame header/footer' };
-  }
-  const [, tag, sig, netStr, sender, compactBody] = m;
-  let restored = compactBody;
-  for (const [word, token] of GLYPH_DICT) {
-    restored = restored.split(token).join(word);
-  }
-  return {
-    valid: true,
-    tag,
-    ternarySignature: sig,
-    ternaryNet: Number(netStr),
-    sender,
-    restored,
-  };
+  const invalid = error => ({ valid: false, integrityVerified: false, error });
+  if (typeof frame !== 'string') return invalid('Frame must be text');
+  if (!frame.startsWith('<~~0o0|v2|')) return invalid('Unsupported or legacy frame: re-encode as v2; legacy payloads may already be lossy');
+  const m = frame.match(/^<~~0o0\|(v2\|([^|:]*):\{<3,<3,<3\}\+1\|b3:([T01]{9})\(([+-]?\d+)\)\|by:([^|]*)\|([\s\S]*))\|crc32:([0-9a-f]{8})\|0o0~~>$/);
+  if (!m || m[0].length !== frame.length) return invalid('Invalid v2 frame structure');
+  try {
+    const [, content, encodedTag, signature, netText, encodedSender, body, checksum] = m;
+    if (crc32(content) !== checksum) return invalid('CRC32 mismatch');
+    const tag = decodeURIComponent(encodedTag), sender = decodeURIComponent(encodedSender);
+    if (headerText(tag) !== encodedTag || headerText(sender) !== encodedSender) return invalid('Noncanonical metadata encoding');
+    const restored = expandBody(body);
+    const expected = ternaryHash9(restored);
+    if (expected.signature !== signature || String(expected.net >= 0 ? '+' + expected.net : expected.net) !== netText) return invalid('Payload checksum mismatch');
+    return { valid: true, integrityVerified: true, version: 2, authenticated: false, tag, sender,
+      ternarySignature: signature, ternaryNet: expected.net, restored };
+  } catch (error) { return invalid(error.message); }
 }
 
 // ---------------------------------------------------------------------------
@@ -481,7 +492,7 @@ export function runPipeline({ force = false } = {}) {
         ``,
         `## ActionablePoints`,
         `- Platform parity verified across Android APK, iOS/macOS SwiftUI, and Web/PWA`,
-        `- Kompress ratio ${ksu.compressionRatio}x (${ksu.rawBytes}B -> ${ksu.loraPackedBytes}B LoRa packet, ${ksu.loraAirtimeMs}ms airtime)`,
+        `- Kompress ratio ${ksu.compressionRatio}x (${ksu.rawBytes}B -> ${ksu.frameBytes}B UTF-8 frame; no radio airtime measured)`,
         `- Balanced-ternary signature b3:${ksu.ternarySignature} (net ${ksu.ternaryNet >= 0 ? '+' + ksu.ternaryNet : ksu.ternaryNet})`,
       ].join('\n');
       fs.writeFileSync(responsePath, responseMd);
@@ -492,7 +503,7 @@ export function runPipeline({ force = false } = {}) {
       const respText = fs.readFileSync(responsePath, 'utf8');
       const summaryMatch = respText.match(/## Summary\s+([\s\S]*?)(?=\n## |\s*$)/);
       const scoreMatch = respText.match(/Rating:\s*(\d+)/i);
-      const frameMatch = respText.match(/(<~~0o0\|[\s\S]*?\|0o0~~>)/);
+      const frameMatch = respText.match(/^## KompressFrame\r?\n(<~~0o0\|[\s\S]*\|0o0~~>)(?=\r?\n\r?\n## ActionablePoints)/m);
       const pointsMatch = respText.match(/## ActionablePoints\s+([\s\S]*?)(?=\n## |\s*$)/);
 
       const frameStr = frameMatch ? frameMatch[1].trim() : '';
@@ -530,7 +541,12 @@ export function runPipeline({ force = false } = {}) {
       fs.writeFileSync(parsedPath, JSON.stringify(parsedObj, null, 2));
     }
 
-    parsedItems.push(JSON.parse(fs.readFileSync(parsedPath, 'utf8')));
+    const parsed = JSON.parse(fs.readFileSync(parsedPath, 'utf8'));
+    // Cached flags are historical claims; validate the actual frame on every run.
+    const verification = decodeKompressSuperUltra(parsed.kompressFrame);
+    parsed.kompressVerified = verification.valid;
+    parsed.kompressVerificationError = verification.error ?? null;
+    parsedItems.push(parsed);
   }
 
   // STAGE 5: RENDER (emit unified state bundle for Web, Android, iOS, macOS)
