@@ -103,7 +103,21 @@ divided by frame bytes (it can be below 1). The former simulated
 radio delivery or measured airtime is implied by codec results. This protocol
 update does not establish native radio or app feature parity.
 
-Run `node --test` for isolated Node/browser-codec regressions and `cd apple &&
-swift test -j 2` for Swift parity against the same `test/codec-vectors.json`.
+Run `npm ci --ignore-scripts` then `npm test` for isolated Node/browser
+regressions and `cd apple && swift test -j 2` for Swift parity against the same `test/codec-vectors.json`.
 The pipeline integration test uses a temporary directory, not checked-in state
 or a sibling blog checkout. No Android signing or hardware is used by these tests.
+
+## Rendering untrusted text
+
+Member names, handles, roles, symbols, transports, locations and digest content
+are assigned through DOM text nodes. SVG elements use the SVG namespace and
+fixed attribute names; stored colors accept only hexadecimal CSS colors.
+Digest links accept only absolute HTTP(S) URLs and use `noopener noreferrer`.
+Other URL schemes display a plain title. Existing storage keys and values are
+preserved; the renderer does not rewrite saved records when loading them.
+
+The `linkedom` development dependency runs isolated DOM regression tests for
+markup-like input, stored-state reload, attribute/color boundaries and digest
+links. It is not bundled into the browser page or the Android asset. These tests
+do not establish radio functionality or Android bridge isolation.
