@@ -10,7 +10,7 @@ if args.contains("--add-member") {
         handle: "Kin #\(hive.members.count + 1) ❀",
         symbol: "❀",
         ring: .ring2OverflowInfinity,
-        role: "Dynamic MultiGraph Addition Beyond Apple 6-Cap",
+        role: "Dynamic Local Graph Addition",
         frequencyHz: 432.0,
         connectTo: "mem-03-peterjoz"
     )
@@ -18,14 +18,14 @@ if args.contains("--add-member") {
 }
 
 print("======================================================================")
-print("⬡ BEEHIVE NATIVE APPLE ENGINE (macOS + iOS) · Peter-beerusSan ^^")
-print("  Formula: {<3, <3, <3} + 1 .. + ∞  |  Apple Family Cap: 6 (BYPASSED)")
-print("  Active MultiGraph Nodes: \(hive.members.count) (+\(hive.overflowMembersCount) beyond Apple 6-cap)")
-print("  Radios: \(RadioTransport.allCases.map(\.rawValue).joined(separator: " · "))")
+print("⬡ BEEHIVE LOCAL GRAPH + CODEC PREVIEW · Peter-beerusSan ^^")
+print("  Formula: {<3, <3, <3} + 1 .. + ∞  |  Local graph reference threshold: 6")
+print("  Active MultiGraph Nodes: \(hive.members.count) (+\(hive.overflowMembersCount) above the local six-node reference)")
+print("  Transport labels (metadata only; no radio operation): \(RadioTransport.allCases.map(\.rawValue).joined(separator: " · "))")
 print("======================================================================")
 
 for m in hive.members {
-    let badge = m.exceedsAppleFamilyCap ? "[OVERFLOW >6 CAP]" : "[CORE/SLOT 1..6]"
+    let badge = m.exceedsAppleFamilyCap ? "[LOCAL SLOT >6]" : "[CORE/SLOT 1..6]"
     print(String(format: "  #%02d %-28@ | %-6@ | %6.1f Hz | %@", m.slotNumber, (m.handle as NSString), (m.symbol as NSString), m.frequencyHz, badge))
 }
 
