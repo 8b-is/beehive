@@ -3,3 +3,6 @@ apple/.build/
 apple/.swiftpm/
 .DS_Store
 node_modules/
+
+apple/BeeHive.xcodeproj/
+apple/Generated/

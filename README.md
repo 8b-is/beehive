@@ -1,9 +1,36 @@
 # ⬡ BeeHive (`8b-is/beehive`)
 
 BeeHive is a local family-graph, WebAudio and codec prototype with an Android
-WebView wrapper, a Swift library/CLI, and a file-based digest demonstration.
-Adding records beyond six changes only BeeHive's local graph. It does not
-modify Apple Family Sharing, invite people to an account, or activate radios.
+WebView wrapper, SwiftUI iOS/macOS app targets, a Linux/AyeOS loopback host,
+and a file-based digest demonstration. Adding records beyond six changes only
+BeeHive's local graph. It does not modify Apple Family Sharing, invite people
+to an account, or activate radios.
+
+## One-line install
+
+```bash
+curl -fsSL https://beehive.vaked.dev/install.sh | sh
+```
+
+Installs a loopback browser host into `~/.local/share/beehive` and a `beehive`
+launcher into `~/.local/bin` (no sudo). Choose a platform explicitly when
+needed: `sh -s -- --platform ayeos`, `--android` for the APK, or `--ios` for
+Xcode steps. Node.js 18+ is required for the Linux/macOS/AyeOS host. The
+installer always binds to `127.0.0.1` and does not enable radios or accounts.
+
+## Platform matrix
+
+[`platforms/manifest.json`](platforms/manifest.json) is the source of truth for
+target entries and their verification boundaries.
+
+| Target | Entry | Verification boundary |
+| --- | --- | --- |
+| Android | `android/build_apk.sh` | WebView APK builds; bridge and QuantT hardware behavior are unverified |
+| iOS | `apple/project.yml` | SwiftUI shell plus bundled web UI builds; no device run |
+| macOS | `apple/project.yml` | SwiftUI shell plus bundled web UI builds; no device run |
+| Linux | `platforms/host/server.mjs` | Loopback browser host; no native toolkit UI |
+| AyeOS | `platforms/ayeos/beehive-ayeosd.service.in` | Packaging only; not run on ayeOS hardware |
+| Web | `web/index.html` | Canonical UI; optional device APIs and telemetry need permissions |
 
 ## Implemented behavior and limits
 
@@ -16,7 +43,9 @@ modify Apple Family Sharing, invite people to an account, or activate radios.
 | Android bridge | Bonded Bluetooth list, cached Wi-Fi scan results and A2DP system flag | Not FindMy, a fresh BLE scan or AirPlay; permissions may leave results empty |
 | AirPlay | Availability explanation | No implemented route picker or multi-room sync |
 | Music | Browser WebAudio oscillators and gain controls | No wupz/MLX engine loaded; no verified native audio parity |
-| Apple package | BeeHiveKit, CLI and tests | SwiftUI source is present, but not configured as an app target |
+| Apple package | BeeHiveKit, CLI, tests and generated iOS/macOS app targets | App bundles build, but device runs and native radios are not verified |
+| QuantT | 9-trit RSSI fingerprints, captured anchors, k-NN grid estimate and relative bearing | Relative Wi-Fi estimate only; no GPS/FindMy/UWB, calibration or device run |
+| Linux/AyeOS host | Loopback Node server for the same web UI | Browser UI only; no native toolkit or hardware parity |
 | Digest | Five stages persisted to files using deterministic fixture text | No LLM invocation or quality evaluation; checksum success only checks the frame |
 
 ## Digest demonstration
@@ -42,6 +71,31 @@ not measured usage, current pricing or tested throughput.
 The browser's digest cards are their own static fixtures; they do not read or
 validate those files. A valid codec frame does not verify its narrative.
 
+## QuantT location and navigation
+
+QuantT is a **relative Wi-Fi fingerprint estimate**, not GPS, FindMy, UWB or a
+measured coordinate. It polls `wigle-triad` telemetry (default
+`https://esp32.vaked.dev/api/triad.json`, or the loopback host proxy) and turns
+live RSSI observations into a 9-trit balanced-ternary signature. Capture anchors
+at known local `x`/`y` points, then live fingerprints are matched with weighted
+k-nearest neighbours and quantized to a 1 m grid.
+
+Navigation shows distance and bearing to a chosen anchor in that local frame.
+Directions are only as good as the captured anchors; walls, interference,
+fingerprint drift and stale telemetry can move the estimate. Upstream payloads
+may carry per-beacon `lat`/`lon`, but QuantT ignores them: no coordinate is
+displayed, sent anywhere, or treated as a measured position. No radio is
+activated.
+
+The loopback host proxies telemetry to avoid cross-origin restrictions:
+
+```bash
+node platforms/host/server.mjs --triad-upstream https://esp32.vaked.dev/api/triad.json
+```
+
+Plain-HTTP upstreams must resolve to loopback. An unavailable upstream returns
+HTTP 502 rather than fabricated observations.
+
 ## Local entry points
 
 Open `web/index.html` for the browser prototype. Optional Web Serial/Bluetooth
@@ -50,15 +104,35 @@ APIs depend on browser support and permissions. The page preserves local data.
 ```bash
 cd apple
 swift run beehive-cli --add-member
+
+# Generate and build the iOS/macOS app bundles (requires XcodeGen)
+xcodegen generate
+xcodebuild -project BeeHive.xcodeproj -scheme BeeHive-macOS build
+xcodebuild -project BeeHive.xcodeproj -scheme BeeHive-iOS -destination 'generic/platform=iOS Simulator' build
 ```
 
 The CLI command above adds one in-memory demo member and prints a codec frame;
 it does not run tests. Run `swift test -j 2` in `apple/` for the test suite.
-The SwiftUI view is source-only: there is no configured application target,
-account integration or native radio implementation.
+The SwiftUI app target builds through XcodeGen and bundles the web UI in a
+second tab, so QuantT uses the same fingerprint code as the browser. It has no
+account integration, native radio implementation or device-run verification.
 
-The Android build entry point is `android/build_apk.sh`; inspect the local SDK
-and signing setup before use. A build or downloadable APK does not establish
+Linux, macOS and AyeOS can run the dependency-free host directly:
+
+```bash
+npm run host
+# or
+node platforms/host/server.mjs --platform ayeos --port 8787
+```
+
+The host serves the same `web/index.html` on `127.0.0.1` and injects a
+`window.BeeHiveHostBridge` marker. A marker only changes the status pill; it
+does not prove native parity. The optional AyeOS user service is installed with
+`platforms/ayeos/install.sh` after the one-line installer.
+
+The Android build entry point is `android/build_apk.sh`; it auto-detects the
+newest installed build-tools/platform unless `ANDROID_BUILD_TOOLS` or
+`ANDROID_PLATFORM_JAR` is set. A build or downloadable APK does not establish
 hardware behavior or a production deployment. Native UI/bridge security and
 hardware validation remain separate work.
 
@@ -91,9 +165,19 @@ radio delivery or measured airtime is implied by codec results. This protocol
 update does not establish native radio or app feature parity.
 
 Run `npm ci --ignore-scripts` then `npm test` for isolated Node/browser
-regressions and `cd apple && swift test -j 2` for Swift parity against the same `test/codec-vectors.json`.
-The pipeline integration test uses a temporary directory, not checked-in state
-or a sibling blog checkout. No Android signing or hardware is used by these tests.
+regressions and `cd apple && swift test -j 2` for Swift parity against the same
+`test/codec-vectors.json`. The platform E2E tests start the loopback host on an
+ephemeral port, check health/state/installer/APK routes, the upstream proxy and
+path-traversal rejection, and dry-run the installer for every host target. The
+QuantT tests cover RSSI quantization, fingerprint deduplication, k-NN estimates,
+bearing math, anchor persistence and literal rendering. The pipeline
+integration test uses a temporary directory, not checked-in state or a sibling
+blog checkout. No Android signing or hardware is used by these tests.
+
+`.github/workflows/e2e.yml` runs the web/Linux/AyeOS host suite, the Swift
+tests plus generated macOS/iOS app builds, and the Android APK build in CI.
+CI building an app is not evidence of device behavior, radio delivery or
+account integration.
 
 ## Rendering untrusted text
 

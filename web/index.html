@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>BeeHive · MultiGraphFamily {&lt;3,&lt;3,&lt;3}+1..∞ · FindMy · LoRa · BLE · AirPlay · 8b-is</title>
-<meta name="description" content="BeeHive cross-platform sovereign family & mesh app (Android, iOS, macOS, Web) — infinite MultiGraphFamily beyond Apple Family's 6-member limit, FindMy, LoRa, Bluetooth, AirPlay, 8b-is/music lane, research digest, and <~~0o0 kompress-super-ultra.">
+<meta name="description" content="BeeHive cross-platform sovereign family & mesh app (Android, iOS, macOS, Linux, AyeOS, Web) — infinite MultiGraphFamily beyond Apple Family's 6-member limit, FindMy, LoRa, Bluetooth, AirPlay, 8b-is/music lane, research digest, and <~~0o0 kompress-super-ultra.">
 <style>
   :root {
     --bg: #07060d;
@@ -364,10 +364,11 @@
   <nav class="nav-tabs">
     <button class="tab-btn active" onclick="switchTab('family')">⬡ 1. MultiGraphFamily (∞)</button>
     <button class="tab-btn" onclick="switchTab('radios')">📡 2. FindMy · LoRa · BLE · AirPlay</button>
-    <button class="tab-btn" onclick="switchTab('music')">🎵 3. 8b-is/Music Synth Lane</button>
-    <button class="tab-btn" onclick="switchTab('digest')">📚 4. Research Digest &amp; Pocoo Blog</button>
-    <button class="tab-btn" onclick="switchTab('kompress')">⚡ 5. &lt;~~0o0 Kompress-Super-Ultra</button>
-    <button class="tab-btn" onclick="switchTab('platforms')">📱 6. Android APK + iOS/macOS Builds</button>
+    <button class="tab-btn" onclick="switchTab('loc')">📍 3. QuantT Location + Navigation</button>
+    <button class="tab-btn" onclick="switchTab('music')">🎵 4. 8b-is/Music Synth Lane</button>
+    <button class="tab-btn" onclick="switchTab('digest')">📚 5. Research Digest &amp; Pocoo Blog</button>
+    <button class="tab-btn" onclick="switchTab('kompress')">⚡ 6. &lt;~~0o0 Kompress-Super-Ultra</button>
+    <button class="tab-btn" onclick="switchTab('platforms')">📱 7. Android · iOS · macOS · Linux · AyeOS</button>
   </nav>
 </header>
 
@@ -470,7 +471,45 @@
     </div>
   </section>
 
-  <!-- TAB 3: 8B-IS/MUSIC SYNTH LANE -->
+  <!-- TAB 3: QUANTT LOCATION + NAVIGATION (wigle-triad telemetry) -->
+  <section id="tab-loc" class="tab-pane">
+    <div class="grid-2">
+      <div class="card">
+        <h2>📍 QuantT Location · wigle-triad Fingerprints</h2>
+        <p class="lead">QuantT is a relative Wi-Fi fingerprint estimate for this device, not GPS, FindMy, UWB or a measured coordinate. It polls <code>wigle-triad</code> telemetry and compares live RSSI vectors against anchors you capture at known points. The grid is quantized to 1 m.</p>
+        <div class="form-row">
+          <select id="quantt-endpoint">
+            <option value="https://esp32.vaked.dev/api/triad.json">esp32.vaked.dev telemetry mirror</option>
+            <option value="/api/triad.json">Loopback host proxy</option>
+          </select>
+          <button class="btn" id="quantt-connect" onclick="toggleQuantT()">▶ Start Live Estimate</button>
+        </div>
+        <div class="form-row">
+          <input id="quantt-anchor-name" placeholder="Anchor name (Kitchen)">
+          <input id="quantt-anchor-x" type="number" step="0.5" value="0" placeholder="x (m)">
+          <input id="quantt-anchor-y" type="number" step="0.5" value="0" placeholder="y (m)">
+          <button class="btn teal" onclick="captureQuantTAnchor()">+ Capture Anchor</button>
+        </div>
+        <div id="quantt-status" class="code-box">QuantT idle. Start live telemetry, then capture at least three anchors at known x/y points. No location is calculated until an anchor exists.</div>
+        <div id="quantt-trit" class="code-box">Live 9-trit Wi-Fi signature: awaiting telemetry.</div>
+        <h2>Captured Anchors (<span id="quantt-anchor-count">0</span>)</h2>
+        <div id="quantt-anchors" class="member-list"></div>
+      </div>
+
+      <div class="card">
+        <h2>🧭 QuantT Navigation · Relative Grid</h2>
+        <p class="lead">The map is an uncalibrated local frame built from your anchors. Bearing and distance are only as accurate as those anchors; walls, interference and stale fingerprints can move the estimate.</p>
+        <div class="form-row">
+          <select id="quantt-target" onchange="renderQuantT()"></select>
+          <button class="btn rose" onclick="clearQuantTAnchors()">Clear Anchors</button>
+        </div>
+        <svg id="quantt-map" viewBox="0 0 480 360" style="width:100%;height:auto;background:#080611;border:1px solid var(--border);border-radius:12px;"></svg>
+        <div id="quantt-nav" class="code-box" style="margin-top:12px;">Navigation idle. Capture anchors and start live telemetry.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 4: 8B-IS/MUSIC SYNTH LANE -->
   <section id="tab-music" class="tab-pane">
     <div class="grid-2">
       <div class="card">
@@ -547,7 +586,7 @@
     </div>
   </section>
 
-  <!-- TAB 4: RESEARCH DIGEST & POCOO BLOG (/project-development) -->
+  <!-- TAB 5: RESEARCH DIGEST & POCOO BLOG (/project-development) -->
   <section id="tab-digest" class="tab-pane">
     <div class="grid-2">
       <div class="card">
@@ -600,7 +639,7 @@
     </div>
   </section>
 
-  <!-- TAB 5: <~~0o0 KOMPRESS-SUPER-ULTRA CODEC -->
+  <!-- TAB 6: <~~0o0 KOMPRESS-SUPER-ULTRA CODEC -->
   <section id="tab-kompress" class="tab-pane">
     <div class="grid-2">
       <div class="card">
@@ -622,7 +661,7 @@
     </div>
   </section>
 
-  <!-- TAB 6: PLATFORMS (ANDROID APK + iOS + macOS) -->
+  <!-- TAB 7: PLATFORMS (ANDROID + APPLE + LINUX + AYEOS + WEB) -->
   <section id="tab-platforms" class="tab-pane">
     <div class="grid-3">
       <div class="card">
@@ -640,6 +679,23 @@ Bridge: window.AndroidBeeHiveBridge</div>
         <div class="code-box">cd beehive/apple
 swift build -c release
 .build/release/beehive-cli --self-test</div>
+      </div>
+
+      <div class="card">
+        <h2>🐧 Linux Loopback Host</h2>
+        <p class="lead">Dependency-free Node host that serves this same UI on <code>127.0.0.1</code> and injects a host platform marker. It is a browser app, not a native toolkit build; radio and account boundaries are unchanged.</p>
+        <div class="code-box" style="margin-bottom:12px;">curl -fsSL https://beehive.vaked.dev/install.sh | sh
+beehive --port 8787
+# then open http://127.0.0.1:8787/</div>
+        <span class="pill teal">HOST SOURCE · NO NATIVE PARITY CLAIM</span>
+      </div>
+
+      <div class="card">
+        <h2>⬡ AyeOS Host Service</h2>
+        <p class="lead">The same loopback host with <code>--platform ayeos</code> and an optional user systemd unit. Not yet executed on ayeOS hardware; this is a packaging entry point, not a hardware validation.</p>
+        <div class="code-box" style="margin-bottom:12px;">curl -fsSL https://beehive.vaked.dev/install.sh | sh -s -- --platform ayeos
+~/.local/share/beehive/platforms/ayeos/install.sh</div>
+        <span class="pill rose">SERVICE SOURCE · HARDWARE UNVERIFIED</span>
       </div>
 
       <div class="card">
@@ -669,6 +725,7 @@ const GLYPH_DICT = [
   ['8b-is-music', '§8BM'],
   ['kompress-ultra', '§8KU'],
   ['wigle-triad', '§WGT'],
+  ['QuantT', '§QT'],
   ['Apple Family', '§APF'],
   ['Bluetooth', '§BLE'],
   ['AirPlay', '§APL'],
@@ -1049,6 +1106,406 @@ function triggerAirPlayPicker() {
 }
 
 // ---------------------------------------------------------------------------
+// 3b. QuantT Location + Navigation (relative Wi-Fi fingerprints)
+// ---------------------------------------------------------------------------
+const QUANTT_KEY = 'beehive_quantt_anchors_v1';
+const QUANTT_GRID_M = 1;
+const QUANTT_MAX_ANCHORS = 64;
+const QUANTT_POLL_MS = 2500;
+const QUANTT_TRAIL_MAX = 24;
+let quanttTimer = null;
+let quanttRunning = false;
+let quanttEndpoint = 'https://esp32.vaked.dev/api/triad.json';
+let quanttLatest = null;
+let quanttAnchors = [];
+let quanttEstimate = null;
+let quanttTrail = [];
+let quanttLastUpdate = 0;
+let quanttError = '';
+
+function quantizeRssi(rssi) {
+  const value = Number(rssi);
+  if (!Number.isFinite(value)) return { trit: 0, weight: 0 };
+  if (value >= -55) return { trit: 1, weight: Math.min(1, Math.max(0.2, (value + 95) / 45)) };
+  if (value >= -75) return { trit: 0, weight: Math.min(1, Math.max(0.05, (value + 95) / 60)) };
+  return { trit: -1, weight: Math.max(0.05, Math.min(1, (value + 100) / 40)) };
+}
+function quantTritChar(trit) { return trit > 0 ? '1' : trit < 0 ? 'T' : '0'; }
+function quantizeMeters(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.round(number / QUANTT_GRID_M) * QUANTT_GRID_M : 0;
+}
+function boundedVector(vector) {
+  const out = Object.create(null);
+  if (!vector || typeof vector !== 'object') return out;
+  for (const [key, value] of Object.entries(vector)) {
+    const id = String(key).slice(0, 96).trim().toUpperCase();
+    const rssi = Number(value);
+    if (id && Number.isFinite(rssi) && rssi >= -120 && rssi <= 0) out[id] = rssi;
+  }
+  return out;
+}
+
+function triadFingerprint(payload) {
+  const beacons = Array.isArray(payload && payload.beacons) ? payload.beacons : [];
+  const vector = Object.create(null);
+  for (const beacon of beacons) {
+    if (!beacon || typeof beacon !== 'object') continue;
+    const key = String(beacon.bssid || beacon.ssid || '').trim().toUpperCase();
+    const rssi = Number(beacon.rssi);
+    if (!key || !Number.isFinite(rssi) || rssi < -120 || rssi > 0) continue;
+    if (!(key in vector) || rssi > vector[key]) vector[key] = rssi;
+  }
+  const sorted = Object.entries(vector).sort((a, b) => b[1] - a[1]).slice(0, 9);
+  const trits = Array.from({ length: 9 }, (_, i) => sorted[i] ? quantTritChar(quantizeRssi(sorted[i][1]).trit) : '0').join('');
+  const nodes = Array.isArray(payload && payload.nodes)
+    ? payload.nodes.map(n => n && typeof n.node === 'string' ? n.node : '').filter(Boolean)
+    : [];
+  return { vector, trits, nodes, beaconCount: Object.keys(vector).length, capturedAt: Date.now() };
+}
+
+function fingerprintDistance(a, b) {
+  const aKeys = Object.keys(a || {});
+  const bKeys = Object.keys(b || {});
+  const common = aKeys.filter(key => Object.hasOwn(b, key));
+  if (common.length < 2) return Infinity;
+  let weighted = 0, weights = 0;
+  for (const key of common) {
+    const delta = (a[key] - b[key]) / 18;
+    const weight = Math.max(0.1, quantizeRssi(b[key]).weight);
+    weighted += delta * delta * weight;
+    weights += weight;
+  }
+  const coverage = common.length / Math.max(aKeys.length, bKeys.length, 1);
+  return Math.sqrt(weighted / weights) * (2 - coverage);
+}
+
+function estimateQuantTLocalization(fingerprint, anchors) {
+  if (!fingerprint || !Array.isArray(anchors) || anchors.length === 0) return null;
+  const ranked = anchors
+    .map(anchor => ({ anchor, distance: fingerprintDistance(fingerprint.vector, anchor.vector) }))
+    .filter(item => Number.isFinite(item.distance))
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 3);
+  if (!ranked.length) return null;
+  let numeratorX = 0, numeratorY = 0, denominator = 0;
+  for (const { anchor, distance } of ranked) {
+    const weight = 1 / (distance * distance + 0.25);
+    numeratorX += anchor.x * weight;
+    numeratorY += anchor.y * weight;
+    denominator += weight;
+  }
+  if (denominator === 0) return null;
+  const x = quantizeMeters(numeratorX / denominator);
+  const y = quantizeMeters(numeratorY / denominator);
+  const best = ranked[0];
+  const confidence = Math.max(0, Math.min(1, 1 - best.distance / 12));
+  return { x, y, tile: `${x},${y}`, confidence, nearest: best.anchor.name, distance: best.distance, matches: ranked.length };
+}
+
+function quantTBearing(fromX, fromY, toX, toY) {
+  const dx = Number(toX) - Number(fromX);
+  const dy = Number(toY) - Number(fromY);
+  const distance = Math.hypot(dx, dy);
+  const bearing = (Math.atan2(dx, dy) * 180 / Math.PI + 360) % 360;
+  return { dx, dy, distance, bearing };
+}
+function quantTCardinal(bearing) {
+  return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(Number(bearing) / 45) % 8];
+}
+function loadQuantTAnchors() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(QUANTT_KEY) || '[]');
+    if (!Array.isArray(raw)) return [];
+    return raw
+      .filter(a => a && typeof a.name === 'string' && Number.isFinite(Number(a.x)) && Number.isFinite(Number(a.y)) && a.vector && typeof a.vector === 'object')
+      .slice(0, QUANTT_MAX_ANCHORS)
+      .map(a => ({
+        name: a.name.slice(0, 48),
+        x: quantizeMeters(a.x),
+        y: quantizeMeters(a.y),
+        vector: boundedVector(a.vector),
+        trits: typeof a.trits === 'string' ? a.trits.slice(0, 9) : '',
+        capturedAt: Number(a.capturedAt) || 0
+      }));
+  } catch (_) { return []; }
+}
+function saveQuantTAnchors() {
+  try { localStorage.setItem(QUANTT_KEY, JSON.stringify(quanttAnchors)); } catch (_) {}
+}
+
+function renderQuantTAnchors() {
+  const list = document.getElementById('quantt-anchors');
+  const count = document.getElementById('quantt-anchor-count');
+  if (count) count.textContent = String(quanttAnchors.length);
+  if (!list) return;
+  const rows = document.createDocumentFragment();
+  quanttAnchors.forEach((anchor, index) => {
+    const row = textElement('div', 'member-row');
+    row.style.borderLeftColor = 'var(--teal)';
+    const details = textElement('div');
+    details.append(
+      textElement('div', 'm-title', anchor.name),
+      textElement('div', 'm-sub', `x=${anchor.x}m · y=${anchor.y}m · ${Object.keys(anchor.vector).length} BSSIDs · trits ${anchor.trits || 'n/a'}`)
+    );
+    const remove = textElement('button', 'btn rose', 'Remove');
+    remove.addEventListener('click', () => removeQuantTAnchor(index));
+    row.append(details, remove);
+    rows.append(row);
+  });
+  list.replaceChildren(rows);
+  renderQuantTTargets();
+}
+
+function renderQuantTTargets() {
+  const select = document.getElementById('quantt-target');
+  if (!select) return;
+  const selected = Array.from(select.options || []).find(option => option.selected);
+  const current = (selected && selected.value) || select.value || 'origin';
+  const fragment = document.createDocumentFragment();
+  const origin = document.createElement('option');
+  origin.value = 'origin';
+  origin.textContent = 'Origin (0, 0)';
+  fragment.append(origin);
+  quanttAnchors.forEach((anchor, index) => {
+    const option = document.createElement('option');
+    option.value = `anchor:${index}`;
+    option.textContent = `${anchor.name} (${anchor.x}, ${anchor.y})`;
+    fragment.append(option);
+  });
+  select.replaceChildren(fragment);
+  const keep = Array.from(select.options).find(option => option.value === current);
+  if (keep) {
+    keep.selected = true;
+    try { select.value = current; } catch (_) {}
+  }
+}
+
+function quantTTarget() {
+  const select = document.getElementById('quantt-target');
+  if (!select) return null;
+  const selected = Array.from(select.options || []).find(option => option.selected);
+  const value = (selected && selected.value) || select.value || 'origin';
+  if (value === 'origin') return { name: 'Origin', x: 0, y: 0 };
+  const match = /^anchor:(\d+)$/.exec(value);
+  if (!match) return null;
+  return quanttAnchors[Number(match[1])] || null;
+}
+
+function renderQuantTMap() {
+  const svg = document.getElementById('quantt-map');
+  if (!svg) return;
+  const estimate = quanttEstimate;
+  const anchors = quanttAnchors.slice(0, QUANTT_MAX_ANCHORS);
+  if (!anchors.length && !estimate) {
+    svg.replaceChildren();
+    return;
+  }
+  const xs = [0, ...anchors.map(a => a.x), ...(estimate ? [estimate.x] : [])];
+  const ys = [0, ...anchors.map(a => a.y), ...(estimate ? [estimate.y] : [])];
+  let minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const pad = Math.max(2, (maxX - minX) * 0.15, (maxY - minY) * 0.15);
+  minX -= pad; maxX += pad; minY -= pad; maxY += pad;
+  const spanX = Math.max(8, maxX - minX), spanY = Math.max(8, maxY - minY);
+  const width = 480, height = 360, margin = 36;
+  const scale = Math.min((width - margin * 2) / spanX, (height - margin * 2) / spanY);
+  const centerX = (minX + maxX) / 2, centerY = (minY + maxY) / 2;
+  const project = (x, y) => ({ sx: width / 2 + (x - centerX) * scale, sy: height / 2 - (y - centerY) * scale });
+  const nodes = [];
+  nodes.push(svgElement('rect', { x: 0, y: 0, width, height, fill: '#080611' }));
+  const step = Math.max(1, Math.ceil(Math.max(spanX, spanY) / 8));
+  for (let x = Math.ceil(minX / step) * step; x <= maxX; x += step) {
+    const p = project(x, 0);
+    nodes.push(svgElement('line', { x1: p.sx, y1: margin / 2, x2: p.sx, y2: height - margin / 2, stroke: 'rgba(0,229,201,0.12)' }));
+    nodes.push(svgElement('text', { x: p.sx + 2, y: height - 8, fill: '#6f6688', 'font-family': 'monospace', 'font-size': 8 }, `${x}m`));
+  }
+  for (let y = Math.ceil(minY / step) * step; y <= maxY; y += step) {
+    const p = project(0, y);
+    nodes.push(svgElement('line', { x1: margin / 2, y1: p.sy, x2: width - margin / 2, y2: p.sy, stroke: 'rgba(0,229,201,0.12)' }));
+    nodes.push(svgElement('text', { x: 4, y: p.sy - 2, fill: '#6f6688', 'font-family': 'monospace', 'font-size': 8 }, `${y}m`));
+  }
+  if (quanttTrail.length > 1) {
+    nodes.push(svgElement('polyline', {
+      points: quanttTrail.map(point => { const p = project(point.x, point.y); return `${p.sx.toFixed(1)},${p.sy.toFixed(1)}`; }).join(' '),
+      fill: 'none', stroke: 'rgba(255,107,193,0.55)', 'stroke-width': 1.5
+    }));
+  }
+  const origin = project(0, 0);
+  nodes.push(svgElement('circle', { cx: origin.sx, cy: origin.sy, r: 4, fill: '#ffd700' }));
+  nodes.push(svgElement('text', { x: origin.sx + 7, y: origin.sy + 3, fill: '#ffd700', 'font-family': 'monospace', 'font-size': 9 }, 'origin'));
+  for (const anchor of anchors) {
+    const p = project(anchor.x, anchor.y);
+    nodes.push(svgElement('circle', { cx: p.sx, cy: p.sy, r: 6, fill: '#0d0a1a', stroke: '#00e5c9', 'stroke-width': 2 }));
+    nodes.push(svgElement('text', { x: p.sx + 9, y: p.sy + 3, fill: '#f3effb', 'font-family': 'monospace', 'font-size': 9 }, anchor.name));
+  }
+  if (estimate) {
+    const p = project(estimate.x, estimate.y);
+    nodes.push(svgElement('line', { x1: p.sx - 9, y1: p.sy, x2: p.sx + 9, y2: p.sy, stroke: '#ff6ac1', 'stroke-width': 2 }));
+    nodes.push(svgElement('line', { x1: p.sx, y1: p.sy - 9, x2: p.sx, y2: p.sy + 9, stroke: '#ff6ac1', 'stroke-width': 2 }));
+    nodes.push(svgElement('circle', { cx: p.sx, cy: p.sy, r: 4, fill: '#ff6ac1' }));
+    nodes.push(svgElement('text', { x: p.sx + 11, y: p.sy + 3, fill: '#ff6ac1', 'font-family': 'monospace', 'font-size': 9 }, `QuantT ${estimate.tile}`));
+    const target = quantTTarget();
+    if (target) {
+      const t = project(target.x, target.y);
+      nodes.push(svgElement('line', { x1: p.sx, y1: p.sy, x2: t.sx, y2: t.sy, stroke: 'rgba(255,215,0,0.7)', 'stroke-dasharray': '4 4', 'stroke-width': 1.5 }));
+    }
+  }
+  const fragment = document.createDocumentFragment();
+  for (const node of nodes) fragment.append(node);
+  svg.replaceChildren(fragment);
+}
+
+function renderQuantTNav() {
+  const nav = document.getElementById('quantt-nav');
+  if (!nav) return;
+  const target = quantTTarget();
+  const lines = ['RELATIVE QUANTIZED ESTIMATE · NOT GPS, FindMy, UWB OR A MEASURED COORDINATE'];
+  if (!quanttLatest) lines.push('No telemetry yet. Start live estimate to build a fingerprint.');
+  if (!quanttAnchors.length) lines.push('No anchors. Capture at least three known x/y points before trusting navigation.');
+  if (quanttEstimate) {
+    lines.push(`Current tile: ${quanttEstimate.tile} m · confidence ${Math.round(quanttEstimate.confidence * 100)}% · nearest ${quanttEstimate.nearest}`);
+    if (target) {
+      const bearing = quantTBearing(quanttEstimate.x, quanttEstimate.y, target.x, target.y);
+      lines.push(`Target ${target.name} (${target.x}, ${target.y}) m · distance ${bearing.distance.toFixed(1)} m · bearing ${bearing.bearing.toFixed(0)}° ${quantTCardinal(bearing.bearing)}`);
+      lines.push(`Move ${bearing.distance.toFixed(1)} m ${quantTCardinal(bearing.bearing)} to reach ${target.name}. Bearings assume +y is north in this local frame.`);
+    } else {
+      lines.push('Pick a target anchor to compute distance and bearing.');
+    }
+  }
+  nav.textContent = lines.join('\n');
+}
+
+function renderQuantT() {
+  const status = document.getElementById('quantt-status');
+  const trit = document.getElementById('quantt-trit');
+  if (status) {
+    const age = quanttLastUpdate ? ((Date.now() - quanttLastUpdate) / 1000).toFixed(1) : 'n/a';
+    const lines = [
+      'RELATIVE WI-FI FINGERPRINT · NOT GPS / FindMy / UWB',
+      quanttRunning ? `LIVE · polling every ${QUANTT_POLL_MS} ms · ${quanttEndpoint}` : 'IDLE',
+      quanttLatest ? `Telemetry: ${quanttLatest.beaconCount} beacons · nodes ${quanttLatest.nodes.join(', ') || 'none'} · age ${age}s` : 'Telemetry: none',
+      quanttError ? `Error: ${quanttError}` : '',
+      quanttEstimate ? `Estimate: tile ${quanttEstimate.tile} m · confidence ${Math.round(quanttEstimate.confidence * 100)}%` : 'Estimate: needs at least two shared BSSIDs with an anchor',
+      quanttAnchors.length < 3 ? `Anchors: ${quanttAnchors.length}/3 minimum suggested` : `Anchors: ${quanttAnchors.length}`
+    ].filter(Boolean);
+    status.textContent = lines.join('\n');
+  }
+  if (trit) {
+    trit.textContent = quanttLatest
+      ? `Live 9-trit Wi-Fi signature: ${quanttLatest.trits}\n{−1:T · 0:0 · +1:1} · quantized RSSI, not a cryptographic digest`
+      : 'Live 9-trit Wi-Fi signature: awaiting telemetry.';
+  }
+  renderQuantTAnchors();
+  renderQuantTMap();
+  renderQuantTNav();
+}
+
+function applyQuantTTelemetry(payload) {
+  quanttLatest = triadFingerprint(payload);
+  quanttLastUpdate = Date.now();
+  quanttEstimate = estimateQuantTLocalization(quanttLatest, quanttAnchors);
+  if (quanttEstimate) {
+    const last = quanttTrail[quanttTrail.length - 1];
+    if (!last || last.x !== quanttEstimate.x || last.y !== quanttEstimate.y) {
+      quanttTrail.push({ x: quanttEstimate.x, y: quanttEstimate.y });
+      if (quanttTrail.length > QUANTT_TRAIL_MAX) quanttTrail.shift();
+    }
+  }
+  renderQuantT();
+}
+
+async function pollQuantT() {
+  const endpointSelect = document.getElementById('quantt-endpoint');
+  if (endpointSelect) {
+    const selected = Array.from(endpointSelect.options || []).find(option => option.selected);
+    const endpoint = (selected && selected.value) || endpointSelect.value;
+    if (endpoint) quanttEndpoint = endpoint;
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000);
+  try {
+    const response = await fetch(quanttEndpoint, {
+      signal: controller.signal,
+      cache: 'no-store',
+      credentials: 'omit',
+      headers: { accept: 'application/json' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    if (!payload || typeof payload !== 'object') throw new Error('telemetry payload is not an object');
+    quanttError = '';
+    applyQuantTTelemetry(payload);
+  } catch (error) {
+    quanttError = error && error.name === 'AbortError' ? 'telemetry timeout' : String(error && error.message || error);
+    renderQuantT();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function toggleQuantT() {
+  const button = document.getElementById('quantt-connect');
+  if (quanttRunning) {
+    clearInterval(quanttTimer);
+    quanttTimer = null;
+    quanttRunning = false;
+    if (button) button.textContent = '▶ Start Live Estimate';
+    renderQuantT();
+    return;
+  }
+  quanttRunning = true;
+  if (button) button.textContent = '⏹ Stop Live Estimate';
+  pollQuantT();
+  quanttTimer = setInterval(pollQuantT, QUANTT_POLL_MS);
+}
+
+function captureQuantTAnchor() {
+  if (!quanttLatest) {
+    quanttError = 'start live telemetry before capturing an anchor';
+    renderQuantT();
+    return;
+  }
+  if (quanttAnchors.length >= QUANTT_MAX_ANCHORS) {
+    quanttError = `anchor limit reached (${QUANTT_MAX_ANCHORS})`;
+    renderQuantT();
+    return;
+  }
+  const nameInput = document.getElementById('quantt-anchor-name');
+  const xInput = document.getElementById('quantt-anchor-x');
+  const yInput = document.getElementById('quantt-anchor-y');
+  const name = ((nameInput && nameInput.value.trim()) || `Anchor #${quanttAnchors.length + 1}`).slice(0, 48);
+  const x = quantizeMeters(xInput ? xInput.value : 0);
+  const y = quantizeMeters(yInput ? yInput.value : 0);
+  quanttAnchors.push({
+    name,
+    x,
+    y,
+    vector: { ...quanttLatest.vector },
+    trits: quanttLatest.trits,
+    capturedAt: Date.now()
+  });
+  saveQuantTAnchors();
+  quanttError = '';
+  if (nameInput) nameInput.value = '';
+  renderQuantT();
+}
+
+function removeQuantTAnchor(index) {
+  quanttAnchors.splice(index, 1);
+  saveQuantTAnchors();
+  quanttEstimate = estimateQuantTLocalization(quanttLatest, quanttAnchors);
+  renderQuantT();
+}
+
+function clearQuantTAnchors() {
+  quanttAnchors = [];
+  quanttEstimate = null;
+  quanttTrail = [];
+  saveQuantTAnchors();
+  renderQuantT();
+}
+
+// ---------------------------------------------------------------------------
 // 4. 8b-is/music Polyphonic WebAudio Synthesizer
 // ---------------------------------------------------------------------------
 let audioCtx = null;
@@ -1249,18 +1706,44 @@ function switchTab(name) {
   const pane = document.getElementById('tab-' + name);
   if (pane) pane.classList.add('active');
   const btns = document.querySelectorAll('.tab-btn');
-  const map = { family: 0, radios: 1, music: 2, digest: 3, kompress: 4, platforms: 5 };
+  const map = { family: 0, radios: 1, loc: 2, music: 3, digest: 4, kompress: 5, platforms: 6 };
   if (btns[map[name]]) btns[map[name]].classList.add('active');
+}
+
+function detectPlatform() {
+  if (typeof window.AndroidBeeHiveBridge === 'object' && window.AndroidBeeHiveBridge) {
+    return { id: 'android', text: 'ANDROID BRIDGE PRESENT · RESULTS REQUIRE VALIDATION' };
+  }
+  const host = window.BeeHiveHostBridge;
+  if (host && typeof host.platform === 'string') {
+    const id = host.platform.toLowerCase();
+    const labels = {
+      android: 'ANDROID HOST · BROWSER UI · NATIVE PARITY UNVERIFIED',
+      ios: 'IOS HOST · BROWSER UI · NATIVE PARITY UNVERIFIED',
+      macos: 'MACOS HOST · BROWSER UI · NATIVE PARITY UNVERIFIED',
+      linux: 'LINUX HOST · BROWSER UI · NATIVE PARITY UNVERIFIED',
+      ayeos: 'AYEOS HOST · BROWSER UI · HARDWARE UNVERIFIED'
+    };
+    return { id, text: labels[id] || 'HOST · BROWSER UI · NATIVE PARITY UNVERIFIED' };
+  }
+  return { id: 'web', text: 'WEB PROTOTYPE · NATIVE PARITY UNVERIFIED' };
+}
+
+function applyPlatformBadge() {
+  const platform = detectPlatform();
+  const pill = document.getElementById('pill-platform');
+  if (pill) pill.textContent = platform.text;
+  return platform;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   loadState();
+  quanttAnchors = loadQuantTAnchors();
   renderFamilyGraph();
   renderDigestCards();
+  renderQuantT();
   runLiveKompress();
-  if (window.AndroidBeeHiveBridge) {
-    document.getElementById('pill-platform').textContent = 'ANDROID BRIDGE PRESENT · RESULTS REQUIRE VALIDATION';
-  }
+  applyPlatformBadge();
 });
 </script>
 </body>

@@ -1,6 +1,12 @@
 {
   "name": "beehive",
   "private": true,
-  "scripts": { "test": "node --test" },
+  "scripts": {
+    "test": "node --test",
+    "test:e2e": "node --test test/platforms.test.mjs",
+    "build:dist": "node platforms/host/build-dist.mjs",
+    "host": "node platforms/host/server.mjs",
+    "host:ayeos": "node platforms/host/server.mjs --platform ayeos"
+  },
   "devDependencies": { "linkedom": "0.18.14" }
 }

@@ -3,9 +3,14 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"
-SDK="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
-BT="$SDK/build-tools/36.0.0"
-PLATFORM="$SDK/platforms/android-36/android.jar"
+SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-$HOME/Library/Android/sdk}}"
+BT_VERSION=$(ls -1 "$SDK/build-tools" 2>/dev/null | sort -t. -k1,1n -k2,2n -k3,3n | tail -n 1)
+PLATFORM_VERSION=$(ls -1 "$SDK/platforms" 2>/dev/null | grep '^android-' | sort -t- -k2,2n | tail -n 1)
+BT="${ANDROID_BUILD_TOOLS:-$SDK/build-tools/$BT_VERSION}"
+PLATFORM="${ANDROID_PLATFORM_JAR:-$SDK/platforms/$PLATFORM_VERSION/android.jar}"
+
+[ -n "$BT" ] && [ -x "$BT/aapt2" ] || { echo "[android] missing build-tools (set ANDROID_BUILD_TOOLS)" >&2; exit 1; }
+[ -n "$PLATFORM" ] && [ -f "$PLATFORM" ] || { echo "[android] missing platform android.jar (set ANDROID_PLATFORM_JAR)" >&2; exit 1; }
 
 BUILD="$HERE/build"
 rm -rf "$BUILD"
@@ -14,6 +19,7 @@ mkdir -p "$BUILD/gen" "$BUILD/obj" "$BUILD/dex" "$BUILD/assets" "$ROOT/dist"
 cp "$ROOT/web/index.html" "$BUILD/assets/index.html"
 cp "$ROOT/web/index.html" "$ROOT/dist/index.html"
 cp "$ROOT/data/beehive-state.json" "$ROOT/dist/beehive-state.json"
+cp "$ROOT/install.sh" "$ROOT/dist/install.sh"
 
 echo "[android] Linking AndroidManifest.xml + assets with aapt2..."
 "$BT/aapt2" link \
@@ -24,7 +30,7 @@ echo "[android] Linking AndroidManifest.xml + assets with aapt2..."
   -o "$BUILD/unaligned.apk"
 
 echo "[android] Compiling MainActivity.java -> classes.dex..."
-javac -source 11 -target 11 \
+javac --release 11 \
   -cp "$PLATFORM" \
   -d "$BUILD/obj" \
   "$HERE/src/is/eightb/beehive/MainActivity.java"

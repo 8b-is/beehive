@@ -1,0 +1,56 @@
+{
+  "schema": "beehive.platforms.v1",
+  "app": "BeeHive",
+  "version": "1.0.0",
+  "ui": "web/index.html",
+  "nativeParityVerified": false,
+  "targets": {
+    "android": {
+      "label": "Android",
+      "entry": "android/src/is/eightb/beehive/MainActivity.java",
+      "artifact": "dist/BeeHive-v1.0.0-android-universal.apk",
+      "build": "android/build_apk.sh",
+      "e2e": "npm test",
+      "status": "WebView wrapper shared with the canonical UI; APK build is verified, hardware bridge and QuantT telemetry are not"
+    },
+    "ios": {
+      "label": "iOS",
+      "entry": "apple/Sources/BeeHiveApp/BeeHiveAppMain.swift",
+      "project": "apple/project.yml",
+      "build": "cd apple && xcodegen generate && xcodebuild -scheme BeeHive-iOS",
+      "e2e": "cd apple && swift test -j 2",
+      "status": "SwiftUI shell plus bundled web UI; simulator build is the verification boundary"
+    },
+    "macos": {
+      "label": "macOS",
+      "entry": "apple/Sources/BeeHiveApp/BeeHiveAppMain.swift",
+      "project": "apple/project.yml",
+      "build": "cd apple && xcodegen generate && xcodebuild -scheme BeeHive-macOS",
+      "e2e": "cd apple && swift test -j 2",
+      "status": "SwiftUI shell plus bundled web UI and CLI; local graph, codec and QuantT build, device run unverified"
+    },
+    "linux": {
+      "label": "Linux",
+      "entry": "platforms/host/server.mjs",
+      "build": "npm ci --ignore-scripts",
+      "e2e": "npm test",
+      "status": "Loopback browser host; no native toolkit UI"
+    },
+    "ayeos": {
+      "label": "AyeOS",
+      "entry": "platforms/host/server.mjs",
+      "service": "platforms/ayeos/beehive-ayeosd.service.in",
+      "build": "npm ci --ignore-scripts",
+      "e2e": "BEEHIVE_PLATFORM=ayeos npm test",
+      "status": "Loopback browser host service; not yet run on ayeOS hardware"
+    },
+    "web": {
+      "label": "Web",
+      "entry": "web/index.html",
+      "artifact": "dist/index.html",
+      "build": "node platforms/host/build-dist.mjs",
+      "e2e": "npm test",
+      "status": "Canonical UI; QuantT is a relative Wi-Fi fingerprint estimate, not GPS; optional device APIs require permissions"
+    }
+  }
+}
