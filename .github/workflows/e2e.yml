@@ -69,4 +69,4 @@ jobs:
       - run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
       - run: sudo apt-get update && sudo apt-get install -y zip
       - run: bash android/build_apk.sh
-      - run: "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose dist/BeeHive-v1.0.0-android-universal.apk
+      - run: '"$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose dist/BeeHive-v1.0.0-android-universal.apk'
