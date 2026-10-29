@@ -192,3 +192,33 @@ The `linkedom` development dependency runs isolated DOM regression tests for
 markup-like input, stored-state reload, attribute/color boundaries and digest
 links. It is not bundled into the browser page or the Android asset. These tests
 do not establish radio functionality or Android bridge isolation.
+
+## Android WebView isolation candidate
+
+The Android wrapper serves the packaged `index.html` only for a main-frame GET
+at its existing HTTPS origin. Other resource requests receive a local blocked
+response. File/content access, remote network loading, mixed content and WebView
+debugging are disabled. A response Content Security Policy forbids frames,
+connections, objects and forms; inline script/style remain necessary for the
+bundled page. Missing assets fail closed without a file or remote fallback.
+
+Main-frame HTTPS links with a user gesture are handed to an external handler;
+all in-WebView navigation is cancelled. Other schemes (including `findmy:`),
+credential-bearing URLs and nonstandard ports are blocked. Native bridge data
+and permission behavior are unchanged. The HTTPS origin is retained to preserve
+existing browser storage; storage continuity still needs an Android runtime check.
+
+Run the host navigation-policy checks using a JDK 11 or later:
+
+```bash
+bash android/test_policy.sh
+# For a project-local JDK:
+BEEHIVE_JAVA_HOME=/path/to/jdk bash android/test_policy.sh
+```
+
+These checks exercise the policy called by the Android callbacks. They do not
+run WebView. Compilation against Android API classes is also separate from APK
+packaging and runtime validation. Before publishing an Android artifact, verify
+asset loading with network blocking, stored data, new-window links, subframes,
+redirects and the missing-asset path in an actual WebView. Existing signing
+material and permissions require their own review.
