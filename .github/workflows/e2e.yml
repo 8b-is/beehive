@@ -1,0 +1,74 @@
+name: e2e
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web-host:
+    name: Web + Linux host
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: sh -n install.sh
+      - run: node platforms/host/build-dist.mjs
+      - run: test -s dist/index.html && test -s dist/install.sh && test -s dist/beehive-state.json
+
+  ayeos-host:
+    name: AyeOS host packaging
+    runs-on: ubuntu-latest
+    env:
+      BEEHIVE_PLATFORM: ayeos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: test -s platforms/ayeos/beehive-ayeosd.service.in
+      - run: sh -n platforms/ayeos/install.sh
+
+  apple:
+    name: iOS + macOS app
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: apple
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install xcodegen
+      - run: swift test -j 2
+      - run: xcodegen generate
+      - run: xcodebuild -project BeeHive.xcodeproj -scheme BeeHive-macOS -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/dd" CODE_SIGNING_ALLOWED=NO build
+      - run: xcodebuild -project BeeHive.xcodeproj -scheme BeeHive-iOS -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/dd" CODE_SIGNING_ALLOWED=NO build
+      - run: test -d "$RUNNER_TEMP/dd/Build/Products/Debug/BeeHive-macOS.app"
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
+      - run: sudo apt-get update && sudo apt-get install -y zip
+      - run: bash android/build_apk.sh
+      - run: '"$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose dist/BeeHive-v1.0.0-android-universal.apk'

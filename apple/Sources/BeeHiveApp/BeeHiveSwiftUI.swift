@@ -13,12 +13,12 @@ public struct BeeHiveDashboardView: View {
     public var body: some View {
         NavigationStack {
             List {
-                Section("MultiGraphFamily {<3,<3,<3}+1..∞ (Apple 6-Cap Bypassed)") {
+                Section("MultiGraphFamily · Local Graph Preview") {
                     HStack {
                         Text("Active Nodes: \(hive.members.count)")
                             .font(.headline)
                         Spacer()
-                        Text("+\(hive.overflowMembersCount) Beyond 6-Cap")
+                        Text("+\(hive.overflowMembersCount) above local six-node reference")
                             .font(.caption.monospaced())
                             .foregroundStyle(.pink)
                     }
@@ -41,7 +41,7 @@ public struct BeeHiveDashboardView: View {
                     }
                 }
 
-                Section("Family & Hardware Nodes (FindMy · LoRa · BLE · AirPlay)") {
+                Section("Demo Nodes · Transport Metadata") {
                     ForEach(hive.members) { m in
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
@@ -49,7 +49,7 @@ public struct BeeHiveDashboardView: View {
                                     .font(.system(.body, design: .monospaced).bold())
                                 Spacer()
                                 if m.exceedsAppleFamilyCap {
-                                    Text("OVERFLOW >6")
+                                    Text("LOCAL SLOT >6")
                                         .font(.caption2.monospaced())
                                         .padding(.horizontal, 6)
                                         .padding(.vertical, 2)

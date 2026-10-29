@@ -142,6 +142,7 @@ public enum KompressSuperUltra {
         ("8b-is-music", "§8BM"),
         ("kompress-ultra", "§8KU"),
         ("wigle-triad", "§WGT"),
+        ("QuantT", "§QT"),
         ("Apple Family", "§APF"),
         ("Bluetooth", "§BLE"),
         ("AirPlay", "§APL"),

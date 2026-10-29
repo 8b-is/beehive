@@ -20,6 +20,7 @@
 
     <application
         android:label="BeeHive · 8b-is"
+        android:allowBackup="false"
         android:usesCleartextTraffic="false"
         android:hardwareAccelerated="true">
         <activity

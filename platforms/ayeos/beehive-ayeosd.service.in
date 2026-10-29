@@ -1,0 +1,15 @@
+[Unit]
+Description=BeeHive loopback browser host (AyeOS)
+Documentation=https://beehive.vaked.dev
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=@NODE@ @SHARE@/host/server.mjs --platform ayeos --host 127.0.0.1 --port 8787
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target
